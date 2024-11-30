@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\MstUserRepository;
-use App\Requests\Api\User\AddRequest;
+use App\Requests\Api\User\{
+    AddRequest,
+    EditRequest,
+};
 use App\Services\MstUserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -127,10 +130,50 @@ class UserController extends ApiBaseController
      * User Update
      * POST /api/v1/user/update
      *
-     * @param Request $request
+     * @param EditRequest $request
      */
-    public function update(Request $request, $userId) {
-        return ApiBusUtil::successResponse();
+    public function update(EditRequest $request, $userId) {
+        try {
+            $params = $request->only([
+                'password',
+                'user_name',
+                'telephone_number',
+                'user_role_id',
+            ]);
+
+            // Unset password if empty
+            if (empty($params['password'])) {
+                unset($params['password']);
+            }
+
+            // Get user by user id
+            $user = $this->mstUserRepository->getUserByUserId($userId);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Get user role by user role id
+            $userRole = $this->mstUserRepository->findById($params['user_role_id']);
+            if (empty($userRole)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Update user to database
+            $user = $this->mstUserRepository->update($userId, $params);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for user detail
+            $user = $this->mstUserRepository->getUserByUserId($user->user_id);
+            $user = $this->mstUserService->convertDataUserDetail($user);
+
+            return ApiBusUtil::successResponse($user);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**
