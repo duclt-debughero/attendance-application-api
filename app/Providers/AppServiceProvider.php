@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Extensions\CarbonExtension;
 use App\Libs\ValueUtil;
+use App\Repositories\MstUserRepository;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Query\{
     Builder,
     JoinClause,
@@ -32,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @param UrlGenerator $url
      */
-    public function boot(UrlGenerator $url): void {
+    public function boot(UrlGenerator $url, MstUserRepository $mstUserRepository): void {
         if (App::environment() !== 'local') {
             $url->forceScheme('https');
             $this->app['request']->server->set('HTTPS', 'on');
@@ -49,10 +51,17 @@ class AppServiceProvider extends ServiceProvider
 
         // Rate limit for API
         RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(100000)->by($request->user()?->id ?: $request->ip());
         });
 
         // Auth via access token for API
-        Auth::viaRequest('accessToken', function (Request $request) {
+        Auth::viaRequest('accessToken', function (Request $request) use ($mstUserRepository) {
+            $accessToken = $request->header('Authorization') ?? $request->header('authorization');
+            if (empty($accessToken)) {
+                return null;
+            }
+
+            return $mstUserRepository->loginWithAccessToken($accessToken);
         });
 
         // Use Carbon extension
