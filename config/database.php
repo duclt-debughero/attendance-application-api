@@ -2,6 +2,16 @@
 
 use Illuminate\Support\Str;
 
+$dbHostRead = stringToArray(env('DB_HOST_READ'));
+if (empty($dbHostRead)) {
+    $dbHostRead = env('DB_HOST', '127.0.0.1');
+}
+
+$dbHostWrite = stringToArray(env('DB_HOST_WRITE'));
+if (empty($dbHostWrite)) {
+    $dbHostWrite = env('DB_HOST', '127.0.0.1');
+}
+
 return [
 
     /*
@@ -16,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +55,12 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'read' => [
+                'host' => $dbHostRead,
+            ],
+            'write' => [
+                'host' => $dbHostWrite,
+            ],
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
@@ -56,9 +71,14 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            'modes' => [
+                'STRICT_TRANS_TABLES',
+                'NO_ENGINE_SUBSTITUTION',
+            ],
+            'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION block_encryption_mode = 'aes-256-cbc'",
             ]) : [],
         ],
 

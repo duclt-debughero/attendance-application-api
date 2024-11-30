@@ -1,0 +1,62 @@
+ECL001: <0> is a required field.
+ECL002: Please enter <0> with no more than「<1>」characters. (currently <2> characters)
+ECL003: Please enter <0> with at least「<1>」characters. (currently <2> characters)
+ECL004: Please enter <0> in half-width numbers.
+ECL005: Please enter <0> in half-width alphabets.
+ECL006: Please enter <0> in half-width alphanumeric characters.
+ECL007: Please enter your email address correctly.
+ECL008: Please enter <0> in full-width characters.
+ECL009: Please enter <0> in full-width kana.
+ECL010: Please enter the correct date for <0>.
+ECL011: Please enter the correct datetime for <0>.
+ICL012: There are 0 search results.
+ECL013: Error no data.
+ICL014: There is no data matching the specified conditions. Please check your input.
+ICL015: The number of CSV output items is <0>.
+ECL016: Login failed, please try again.
+ECL017: Please enter「<1>」character for <0>. (Currently <2> characters)
+ECL018: The file format is incorrect. Please select <0>.
+ECL019: Invalid file format. Please check the header information.
+ECL020: File size limit <0> exceeded.
+ECL021: Failed to generate file.
+ECL022: The corresponding file does not exist.
+ECL023: <0> is a duplicate.
+ECL024: No access privileges.
+ECL025: <0> cannot contain anything other than half-width alphanumeric characters and the following characters. (「#」、「$」、「%」、「(」、「)」、「*」、「+」、「-」、「.」、「/」、「:」、「;」、「?」、「@」、「[」、「]」、「_ 」、「{」、「}」、「~」)
+ECL026: For <0>, please select a date and time after <1>.
+ECL027: For <0>, select a date after today.
+ECL029: Email address cannot be used as password.
+ECL030: New password does not match confirmation password.
+ECL031: Email address does not exist. Please check your Email address, date of birth, and authentication key again.
+ECL032: This is an already registered email address.
+ICL033: There is no customer information that matches the input content. Please check your input.
+ECL034: Please enter your changes.
+ECL035: "The current password is incorrect. Please check the information you entered.\nAre the uppercase and lowercase letters correct?\nThe password must be 8 or more characters."
+ECL036: Password does not match confirmation password.
+ECL037: Email address or password is incorrect. If you are using it for the first time, please proceed from the new registration button.
+ICL038: There are no new announcements at this time.
+ICL043: You have already registered as a user. Please log in from the login screen.
+ECL049: The entered emoji cannot be registered.
+ECL057: The account you entered has privileges that do not allow you to log in to the management screen. Please check the entered information again or contact your system administrator.
+ICL058: The import process is complete.
+ECL059: Import processing failed. Please check <1> on line <0>.
+ECL059_TITLE: Import processing failed.
+ECL059_DETAIL: Please check <1> on line <0>.
+ECL060: The file character code is incorrect. Please select <0>.
+ECL061: The email address does not match the confirmation email address.
+ECL067: There is a problem with the GoogleMap API. Please try again after. If the information is not retrieved correctly after some time, please contact us.
+ECL068: Please enter the value in the list「<1>」for <0>.
+ICL069: No matching data found.
+ICL070: Please enter <0> characters or less.
+
+API_VALIDATE_PARAMETER: Invalid request parameter.
+API_REQUIRED_PARAMETER: Required request parameters are missing. Please check the parameters.
+API_RECORD_NOT_EXISTS: No matching data found.
+API_ACCESS_TOKEN_EXPIRED: The access token has expired.
+API_ISSUE_ACCESS_TOKEN_FAILED: Authentication error. Please log in again.
+API_LOGIN_FAILED: "Login failed.\nThe Email address or password you entered may be incorrect.\nPlease check and try again."
+API_NOT_LOGIN: You have logged in on another device. Please log in again.
+API_URL_NOT_EXISTS: No matching URL found.
+API_DISABLED_USER_ERROR: Your account is currently disabled.
+API_MAINTENANCE_MODE: Maintenance is currently in progress.
+API_SERVER_ERROR: An internal error occurred.

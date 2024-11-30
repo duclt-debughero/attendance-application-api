@@ -1,0 +1,26 @@
+# AES-256 encrypt
+aes_256_key: 8MmseQwBR5
+aes_256_iv: 4mKCkLQh5D9BUM8s++LbeQ==
+method_aes_256: aes-256-cbc
+method_hash: sha256
+
+# SHA-256 encrypt
+sha256_salt: attendance-application
+
+# Token expire
+access_token_expire: 30 #days
+refresh_token_expire: 180 #days
+
+# Token password
+number_rand_token_password: 8 #characters
+password_token_expire: 24 #hours
+
+del_flg:
+  0: VALID|VALID
+  1: INVALID|INVALID
+
+disable_flg:
+  0: VALID|VALID
+  1: INVALID|INVALID
+
+updated_by_not_logged_in: 0

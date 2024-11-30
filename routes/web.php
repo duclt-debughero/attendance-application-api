@@ -1,7 +1,10 @@
 <?php
 
+use App\Enums\ApiCodeNo;
+use App\Libs\ApiBusUtil;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('app');
+Route::fallback(function (Request $request) {
+    return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::URL_NOT_EXISTS);
 });

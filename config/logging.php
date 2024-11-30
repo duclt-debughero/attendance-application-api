@@ -54,8 +54,23 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', env('LOG_STACK', 'single')),
+            'channels' => ['attendance-application'],
             'ignore_exceptions' => false,
+        ],
+
+        'attendance-application' => [
+            'driver' => 'stack',
+            'channels' => ['attendance-application-daily', 'stderr', 'stdout'],
+            'tap' => [App\Logging\CustomApiLogFile::class],
+            'ignore_exceptions' => false,
+        ],
+
+        'attendance-application-daily' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'tap' => [App\Logging\CustomApiLogFile::class],
+            'days' => 30,
         ],
 
         'single' => [
@@ -94,15 +109,26 @@ return [
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
-        'stderr' => [
-            'driver' => 'monolog',
+        'stdout' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CustomLoggerFactory::class,
+            'with' => [
+                'stream' => 'php://stdout',
+            ],
             'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'min_level' => 'debug',
+            'max_level' => 'warning',
+        ],
+
+        'stderr' => [
+            'driver' => 'custom',
+            'via' => App\Logging\CustomLoggerFactory::class,
             'with' => [
                 'stream' => 'php://stderr',
             ],
-            'processors' => [PsrLogMessageProcessor::class],
+            'level' => env('LOG_LEVEL', 'debug'),
+            'min_level' => 'error',
+            'max_level' => 'emergency',
         ],
 
         'syslog' => [
