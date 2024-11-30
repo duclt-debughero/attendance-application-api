@@ -58,7 +58,22 @@ class UserController extends ApiBaseController
      * @param string|int $userId
      */
     public function detail(Request $request, $userId) {
-        return ApiBusUtil::successResponse();
+        try {
+            // Get user by user id
+            $user = $this->mstUserRepository->getUserByUserId($userId);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+            }
+
+            // Convert data for user detail
+            $user = $this->mstUserService->convertDataUserDetail($user);
+
+            return ApiBusUtil::successResponse($user);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**
