@@ -9,3 +9,8 @@ route_name_to_api_name:
   user.create: USER CREATE
   user.update: USER UPDATE
   user.delete: USER DELETE
+  role.list: ROLE LIST
+  role.detail: ROLE DETAIL
+  role.create: ROLE CREATE
+  role.update: ROLE UPDATE
+  role.delete: ROLE DELETE
