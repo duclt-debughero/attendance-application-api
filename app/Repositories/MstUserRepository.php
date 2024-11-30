@@ -71,6 +71,40 @@ class MstUserRepository extends BaseRepository
     }
 
     /**
+     * Get user by user id
+     *
+     * @param array $params
+     * @return mixed
+     */
+    public function getUserByUserId($userId) {
+        try {
+            $query = MstUser::query()
+                ->select([
+                    'mst_user.user_id',
+                    'mst_user.email_address',
+                    'mst_user.user_name',
+                    'mst_user.telephone_number',
+                    'mst_user.last_login_time',
+                    'user_role.user_role_id',
+                    'user_role.user_role_name',
+                ])
+                ->leftJoin('user_role', function ($join) {
+                    $join
+                        ->on('mst_user.user_role_id', '=', 'user_role.user_role_id')
+                        ->whereValidDelFlg();
+                })
+                ->where('mst_user.user_id', $userId)
+                ->whereValidDelFlg();
+
+            return $query->first();
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
+
+    /**
      * Check email address unique
      *
      * @param string $emailAddress
