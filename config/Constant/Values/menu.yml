@@ -1,0 +1,5 @@
+role_menu:
+  user:
+    menu_id: 1
+  role:
+    menu_id: 2
