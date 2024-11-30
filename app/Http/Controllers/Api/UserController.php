@@ -183,6 +183,24 @@ class UserController extends ApiBaseController
      * @param Request $request
      */
     public function delete(Request $request, $userId) {
-        return ApiBusUtil::successResponse();
+        try {
+            // Get user by user id
+            $user = $this->mstUserRepository->getUserByUserId($userId);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Delete user to database
+            $user = $this->mstUserRepository->deleteById($userId);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            return ApiBusUtil::successResponse();
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 }
