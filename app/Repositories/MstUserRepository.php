@@ -125,4 +125,26 @@ class MstUserRepository extends BaseRepository
             return false;
         }
     }
+
+    /**
+     * Get user by password token
+     *
+     * @param mixed $passwordToken
+     * @return mixed
+     */
+    public function getUserByPasswordToken($passwordToken) {
+        try {
+            $mstUser = MstUser::query()
+                ->where('password_token', $passwordToken)
+                ->where('password_token_expire', '>=', Carbon::now())
+                ->whereValidDelFlg()
+                ->first();
+
+            return $mstUser;
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
 }

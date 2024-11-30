@@ -3,3 +3,4 @@ route_name_to_api_name:
   auth.logout: LOGOUT
   auth.refresh: REFRESH ACCESS TOKEN
   password.forgot: FORGOT PASSWORD
+  password.reset: RESET PASSWORD
