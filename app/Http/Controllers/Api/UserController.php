@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\MstUserRepository;
+use App\Requests\Api\User\AddRequest;
 use App\Services\MstUserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -80,10 +81,46 @@ class UserController extends ApiBaseController
      * User Create
      * POST /api/v1/user/create
      *
-     * @param Request $request
+     * @param AddRequest $request
      */
-    public function create(Request $request) {
-        return ApiBusUtil::successResponse();
+    public function create(AddRequest $request) {
+        try {
+            $params = $request->only([
+                'email_address',
+                'password',
+                'user_name',
+                'telephone_number',
+                'user_role_id',
+            ]);
+
+            // Get user by email address
+            $user = $this->mstUserRepository->getUserByEmailAddress($params['email_address']);
+            if (! empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Get user role by user role id
+            $userRole = $this->mstUserRepository->findById($params['user_role_id']);
+            if (empty($userRole)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Add user to database
+            $user = $this->mstUserRepository->create($params);
+            if (empty($user)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for user detail
+            $user = $this->mstUserRepository->getUserByUserId($user->user_id);
+            $user = $this->mstUserService->convertDataUserDetail($user);
+
+            return ApiBusUtil::successResponse($user);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**
