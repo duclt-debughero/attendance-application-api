@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('password')->name('password.')->group(function () {
         Route::post('/forgot', [PasswordController::class, 'forgot'])->name('forgot');
+        Route::post('/reset', [PasswordController::class, 'reset'])->name('reset');
     });
 
     Route::middleware([ApiAuthToken::class])->group(function () {
