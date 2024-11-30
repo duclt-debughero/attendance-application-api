@@ -4,3 +4,8 @@ route_name_to_api_name:
   auth.refresh: REFRESH ACCESS TOKEN
   password.forgot: FORGOT PASSWORD
   password.reset: RESET PASSWORD
+  user.list: USER LIST
+  user.detail: USER DETAIL
+  user.create: USER CREATE
+  user.update: USER UPDATE
+  user.delete: USER DELETE
