@@ -4,6 +4,7 @@ use App\Enums\ApiCodeNo;
 use App\Http\Controllers\Api\{
     AuthController,
     PasswordController,
+    UserController,
 };
 use App\Http\Middleware\{
     ApiAuthToken,
@@ -33,13 +34,13 @@ Route::prefix('v1')->group(function () {
         // menu_id = 1, menu_name = User List
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['user']['menu_id']])->group(function () {
             Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
-                // Route::prefix('user')->name('user.')->group(function () {
-                //     Route::get('/list', [UserController::class, 'list'])->name('list');
-                //     Route::get('/detail/{userId}', [UserController::class, 'detail'])->name('detail');
-                //     Route::post('/create', [UserController::class, 'create'])->name('create');
-                //     Route::post('/update/{userId}', [UserController::class, 'update'])->name('update');
-                //     Route::post('/delete/{userId}', [UserController::class, 'delete'])->name('delete');
-                // });
+                Route::prefix('user')->name('user.')->group(function () {
+                    Route::get('/list', [UserController::class, 'list'])->name('list');
+                    Route::get('/detail/{userId}', [UserController::class, 'detail'])->name('detail');
+                    Route::post('/create', [UserController::class, 'create'])->name('create');
+                    Route::post('/update/{userId}', [UserController::class, 'update'])->name('update');
+                    Route::post('/delete/{userId}', [UserController::class, 'delete'])->name('delete');
+                });
             });
         });
 

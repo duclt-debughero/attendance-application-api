@@ -9,12 +9,65 @@ use App\Libs\{
 use App\Models\MstUser;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{DB, Log};
 
 class MstUserRepository extends BaseRepository
 {
     public function getModel() {
         return MstUser::class;
+    }
+
+    /**
+     * Search for mst_user
+     *
+     * @param array $params
+     * @return mixed
+     */
+    public function search($params = []) {
+        try {
+            $query = MstUser::query()
+                ->select([
+                    'mst_user.user_id',
+                    'mst_user.email_address',
+                    'mst_user.user_name',
+                    'mst_user.telephone_number',
+                    'mst_user.last_login_time',
+                    'user_role.user_role_id',
+                    'user_role.user_role_name',
+                ])
+                ->leftJoin('user_role', function ($join) {
+                    $join
+                        ->on('mst_user.user_role_id', '=', 'user_role.user_role_id')
+                        ->whereValidDelFlg();
+                })
+                ->whereValidDelFlg();
+
+            // Search for email address
+            if (isset($params['email_address'])) {
+                $query->where('mst_user.email_address', EncryptUtil::encryptAes256($params['email_address']));
+            }
+
+            // Search for user name
+            if (isset($params['user_name'])) {
+                $query->where(DB::Raw($this->dbDecryptAes256('mst_user.user_name')), 'like', "%{$params['user_name']}%");
+            }
+
+            // Search for telephone number
+            if (isset($params['telephone_number'])) {
+                $query->where('mst_user.telephone_number', $params['telephone_number']);
+            }
+
+            // Search for user role
+            if (isset($params['user_role_name'])) {
+                $query->where('user_role.user_role_name', $params['user_role_name']);
+            }
+
+            return $query->get();
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
     }
 
     /**
