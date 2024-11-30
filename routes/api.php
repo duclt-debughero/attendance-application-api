@@ -3,6 +3,7 @@
 use App\Enums\ApiCodeNo;
 use App\Http\Controllers\Api\{
     AuthController,
+    PasswordController,
 };
 use App\Http\Middleware\{
     ApiAuthToken,
@@ -20,6 +21,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware([ApiAuthToken::class]);
+
+    Route::prefix('password')->name('password.')->group(function () {
+        Route::post('/forgot', [PasswordController::class, 'forgot'])->name('forgot');
+    });
 
     Route::middleware([ApiAuthToken::class])->group(function () {
         $roleMenuConfig = ValueUtil::getList('menu.role_menu');
