@@ -35,7 +35,7 @@ class UserRoleController extends ApiBaseController
             }
 
             // Convert data for user role list
-            $userRoles = $this->userRoleService->convertDataUserRoleList($userRoles);
+            $userRoles = $this->userRoleService->convertDataUserRole($userRoles);
 
             return ApiBusUtil::successResponse($userRoles);
         } catch (Exception $e) {

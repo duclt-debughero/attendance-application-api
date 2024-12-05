@@ -26,10 +26,24 @@ class UserRoleRepository extends BaseRepository
                     'user_role.user_role_name',
                     'mst_user.user_name as last_updated_by',
                     'user_role.updated_at as last_updated_at',
+                    'role_menu.menu_id',
+                    'role_menu.menu_name',
+                    'role_permission.permission_id',
+                    'role_permission.permission_type',
                 ])
                 ->leftJoin('mst_user', function ($query) {
                     $query
                         ->on('mst_user.user_id', '=', 'user_role.updated_by')
+                        ->whereValidDelFlg();
+                })
+                ->leftJoin('role_permission', function ($query) {
+                    $query
+                        ->on('role_permission.user_role_id', '=', 'user_role.user_role_id')
+                        ->whereValidDelFlg();
+                })
+                ->leftJoin('role_menu', function ($query) {
+                    $query
+                        ->on('role_menu.menu_id', '=', 'role_permission.menu_id')
                         ->whereValidDelFlg();
                 })
                 ->whereValidDelFlg();
