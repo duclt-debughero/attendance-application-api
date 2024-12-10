@@ -13,17 +13,24 @@ class MstUserService
      * @return mixed
      */
     public function convertDataUserDetail($user) {
-        return [
+        $result = [
             'user_id' => $user->user_id,
             'email_address' => $user->email_address,
             'user_name' => $user->user_name,
             'telephone_number' => $user->telephone_number,
             'last_login_time' => DateUtil::formatDefaultDateTime($user->last_login_time),
-            'user_role' => [
+            'user_role' => [],
+        ];
+
+        // Add user role information if available
+        if (isset($user->user_role_id)) {
+            $result['user_role'] = [
                 'user_role_id' => $user->user_role_id,
                 'user_role_name' => $user->user_role_name,
-            ],
-        ];
+            ];
+        }
+
+        return $result;
     }
 
     /**
