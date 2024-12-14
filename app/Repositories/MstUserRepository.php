@@ -73,7 +73,7 @@ class MstUserRepository extends BaseRepository
     /**
      * Get user by user id
      *
-     * @param array $params
+     * @param string|int $userId
      * @return mixed
      */
     public function getUserByUserId($userId) {
