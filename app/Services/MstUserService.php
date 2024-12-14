@@ -22,7 +22,7 @@ class MstUserService
             'user_role' => [],
         ];
 
-        // Add user role information if available
+        // Add user information if available
         if (isset($user->user_role_id)) {
             $result['user_role'] = [
                 'user_role_id' => $user->user_role_id,
