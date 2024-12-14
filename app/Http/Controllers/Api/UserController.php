@@ -131,6 +131,7 @@ class UserController extends ApiBaseController
      * POST /api/v1/user/update
      *
      * @param EditRequest $request
+     * @param string|int $userId
      */
     public function update(EditRequest $request, $userId) {
         try {
@@ -181,6 +182,7 @@ class UserController extends ApiBaseController
      * POST /api/v1/user/delete
      *
      * @param Request $request
+     * @param string|int $userId
      */
     public function delete(Request $request, $userId) {
         try {
