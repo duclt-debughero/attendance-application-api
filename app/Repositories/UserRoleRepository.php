@@ -13,26 +13,24 @@ class UserRoleRepository extends BaseRepository
     }
 
     /**
-     * Get query user role
+     * Search for user_role
      *
-     * @param array $columns
+     * @param array $params
      * @return mixed
      */
-    public function getQueryUserRole($columns = []) {
+    public function search($params = []) {
         try {
-            $defaultColumns = [
-                'user_role.user_role_id',
-                'user_role.user_role_name',
-                'mst_user.user_name as last_updated_by',
-                'user_role.updated_at as last_updated_at',
-                'role_menu.menu_id',
-                'role_menu.menu_name',
-                'role_permission.permission_id',
-                'role_permission.permission_type',
-            ];
-
             $query = UserRole::query()
-                ->select(array_merge($defaultColumns, $columns))
+                ->select([
+                    'user_role.user_role_id',
+                    'user_role.user_role_name',
+                    'mst_user.user_name as last_updated_by',
+                    'user_role.updated_at as last_updated_at',
+                    'role_menu.menu_id',
+                    'role_menu.menu_name',
+                    'role_permission.permission_id',
+                    'role_permission.permission_type',
+                ])
                 ->leftJoin('mst_user', function ($query) {
                     $query
                         ->on('mst_user.user_id', '=', 'user_role.updated_by')
@@ -50,46 +48,10 @@ class UserRoleRepository extends BaseRepository
                 })
                 ->whereValidDelFlg();
 
-            return $query;
-        } catch (Exception $e) {
-            Log::error($e);
-
-            return false;
-        }
-    }
-
-    /**
-     * Search for user role
-     *
-     * @param array $params
-     * @return mixed
-     */
-    public function search($params = []) {
-        try {
-            $query = $this->getQueryUserRole();
-
             // Search for user role name
             if (isset($params['user_role_name'])) {
                 $query->where('user_role.user_role_name', 'like', "%{$params['user_role_name']}%");
             }
-
-            return $query->get();
-        } catch (Exception $e) {
-            Log::error($e);
-
-            return false;
-        }
-    }
-
-    /**
-     * Get user role by user role id
-     *
-     * @param string|int $userRoleId
-     * @return mixed
-     */
-    public function getUserRoleByUserRoleId($userRoleId) {
-        try {
-            $query = $this->getQueryUserRole()->where('user_role.user_role_id', $userRoleId);
 
             return $query->get();
         } catch (Exception $e) {
