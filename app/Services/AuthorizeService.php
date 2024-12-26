@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Libs\ValueUtil;
 use App\Repositories\{
     RoleMenuRepository,
-    RolePermissionRepostitory,
+    RolePermissionRepository,
 };
 use UnexpectedValueException;
 
@@ -24,7 +24,7 @@ class AuthorizeService
     private $defaultPermissionType;
 
     public function __construct(
-        private RolePermissionRepostitory $rolePermissionRepository,
+        private RolePermissionRepository $rolePermissionRepository,
         private RoleMenuRepository $roleMenuRepository,
     ) {
         $this->defaultPermissionType = ValueUtil::constToValue('role_permission.permission_type.NO_ACCESS');

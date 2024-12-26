@@ -6,7 +6,7 @@ use App\Models\RolePermission;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class RolePermissionRepostitory extends BaseRepository
+class RolePermissionRepository extends BaseRepository
 {
     public function getModel() {
         return RolePermission::class;
