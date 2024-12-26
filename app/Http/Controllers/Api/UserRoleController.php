@@ -53,7 +53,23 @@ class UserRoleController extends ApiBaseController
      * @param string|int $userRoleId
      */
     public function detail(Request $request, $userRoleId) {
-        return ApiBusUtil::successResponse();
+        try {
+            // Get user role by user role id
+            $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRoleId);
+            if (empty($userRole)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+            }
+
+            // Convert data for user role detail
+            $userRole = $this->userRoleService->convertDataUserRole($userRole);
+            $userRole = reset($userRole);
+
+            return ApiBusUtil::successResponse($userRole);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**
@@ -71,6 +87,7 @@ class UserRoleController extends ApiBaseController
      * POST /api/v1/role/update
      *
      * @param Request $request
+     * @param string|int $userRoleId
      */
     public function update(Request $request, $userRoleId) {
         return ApiBusUtil::successResponse();
@@ -81,6 +98,7 @@ class UserRoleController extends ApiBaseController
      * POST /api/v1/role/delete
      *
      * @param Request $request
+     * @param string|int $userRoleId
      */
     public function delete(Request $request, $userRoleId) {
         return ApiBusUtil::successResponse();
