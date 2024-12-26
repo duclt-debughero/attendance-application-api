@@ -15,11 +15,24 @@ class UserRoleRepository extends BaseRepository
     /**
      * Get query user role
      *
+     * @param array $columns
      * @return mixed
      */
-    public function getQueryUserRole() {
+    public function getQueryUserRole($columns = []) {
         try {
+            $defaultColumns = [
+                'user_role.user_role_id',
+                'user_role.user_role_name',
+                'mst_user.user_name as last_updated_by',
+                'user_role.updated_at as last_updated_at',
+                'role_menu.menu_id',
+                'role_menu.menu_name',
+                'role_permission.permission_id',
+                'role_permission.permission_type',
+            ];
+
             $query = UserRole::query()
+                ->select(array_merge($defaultColumns, $columns))
                 ->leftJoin('mst_user', function ($query) {
                     $query
                         ->on('mst_user.user_id', '=', 'user_role.updated_by')
@@ -46,24 +59,14 @@ class UserRoleRepository extends BaseRepository
     }
 
     /**
-     * Search for user_role
+     * Search for user role
      *
      * @param array $params
      * @return mixed
      */
     public function search($params = []) {
         try {
-            $query = $this->getQueryUserRole()
-                ->select([
-                    'user_role.user_role_id',
-                    'user_role.user_role_name',
-                    'mst_user.user_name as last_updated_by',
-                    'user_role.updated_at as last_updated_at',
-                    'role_menu.menu_id',
-                    'role_menu.menu_name',
-                    'role_permission.permission_id',
-                    'role_permission.permission_type',
-                ]);
+            $query = $this->getQueryUserRole();
 
             // Search for user role name
             if (isset($params['user_role_name'])) {
@@ -86,18 +89,7 @@ class UserRoleRepository extends BaseRepository
      */
     public function getUserRoleByUserRoleId($userRoleId) {
         try {
-            $query = $this->getQueryUserRole()
-                ->where('user_role.user_role_id', $userRoleId)
-                ->select([
-                    'user_role.user_role_id',
-                    'user_role.user_role_name',
-                    'mst_user.user_name as last_updated_by',
-                    'user_role.updated_at as last_updated_at',
-                    'role_menu.menu_id',
-                    'role_menu.menu_name',
-                    'role_permission.permission_id',
-                    'role_permission.permission_type',
-                ]);
+            $query = $this->getQueryUserRole()->where('user_role.user_role_id', $userRoleId);
 
             return $query->get();
         } catch (Exception $e) {
