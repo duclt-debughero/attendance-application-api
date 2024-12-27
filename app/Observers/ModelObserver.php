@@ -5,8 +5,7 @@ namespace App\Observers;
 use App\Libs\ValueUtil;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{Auth, Log};
 
 class ModelObserver
 {

@@ -157,6 +157,7 @@ abstract class BaseRepository
                     }
                 }
             });
+
             return $collections;
         } catch (Exception $e) {
             Log::error($e);
@@ -271,17 +272,21 @@ abstract class BaseRepository
 
     /**
      * Get query string that decrypt Aes256 for the provided statement.
-     * The decryption happends on db execution.
+     * The decryption happens on db execution.
      * Usage: search LIKE for a encrypted field
      *
      * @param string $rawStatement raw query (could be table field)
-     * @return string the expression to get decrypted data
+     * @return string|null the expression to get decrypted data
      */
     public function dbDecryptAes256($rawStatement) {
-        $key = ValueUtil::get('common.aes_256_key');
-        $iv = ValueUtil::get('common.aes_256_iv');
-        DB::statement("SET SESSION block_encryption_mode = 'aes-256-cbc'");
+        try {
+            $key = ValueUtil::get('common.aes_256_key');
+            $iv = ValueUtil::get('common.aes_256_iv');
+            DB::statement("SET SESSION block_encryption_mode = 'aes-256-cbc'");
 
-        return "CAST(AES_DECRYPT(FROM_BASE64({$rawStatement}), UNHEX(SHA2('{$key}', 256)), FROM_BASE64('{$iv}')) AS CHAR)";
+            return "CAST(AES_DECRYPT(FROM_BASE64({$rawStatement}), UNHEX(SHA2('{$key}', 256)), FROM_BASE64('{$iv}')) AS CHAR)";
+        } catch (Exception $e) {
+            Log::error($e);
+        }
     }
 }

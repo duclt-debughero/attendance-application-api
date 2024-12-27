@@ -16,7 +16,7 @@ class RoleMenuRepository extends BaseRepository
     /**
      * Retrieves a list of role permission menus for a given user role id.
      *
-     * @param int $userRoleId The ID of the user role.
+     * @param string|int $userRoleId The ID of the user role.
      * @return mixed A collection of role permission menus or false on failure.
      */
     public function getRolePermissionMenus($userRoleId) {

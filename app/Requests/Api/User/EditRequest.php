@@ -26,7 +26,7 @@ class EditRequest extends BaseApiRequest
      * @return array
      */
     public function rules(Request $request) {
-        return [
+        $rules = [
             'password' => [
                 'nullable',
                 new MinLength(8),
@@ -48,9 +48,14 @@ class EditRequest extends BaseApiRequest
             ],
             'user_role_id' => [
                 'required',
-                new ValidUserRole($this->userRoleRepository, $request->user_role_id),
             ],
         ];
+
+        if ($request->has('user_role_id') && $request->user_role_id) {
+            $rules['user_role_id'][] = new ValidUserRole($this->userRoleRepository, $request->user_role_id);
+        }
+
+        return $rules;
     }
 
     /**
@@ -74,9 +79,9 @@ class EditRequest extends BaseApiRequest
      * @return array
      */
     public function messages() {
-        $parrentMessage = parent::messages();
+        $parentMessage = parent::messages();
 
-        return array_merge($parrentMessage, [
+        return array_merge($parentMessage, [
             'password_confirmation.same' => ConfigUtil::getMessage('ECL030'),
         ]);
     }

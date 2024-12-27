@@ -101,14 +101,15 @@ class ValueUtil
      * @return string The number without trailing zeros.
      */
     public static function removeDecimalTrailingZeros($number) {
-        if (empty($number)) {
+        if (! isset($number)) {
             return $number;
         }
+
         $integerPath = number_format($number);
         $decimalPath = explode('.', $number);
         $decimalPath = isset($decimalPath[1]) ? $decimalPath[1] : '';
         $decimalPath = rtrim($decimalPath, '0');
-        $decimalPath = ! empty($decimalPath) ? '.' . $decimalPath : '';
+        $decimalPath = isset($decimalPath) ? '.' . $decimalPath : '';
 
         return $integerPath . $decimalPath;
     }
@@ -121,16 +122,17 @@ class ValueUtil
      *
      * @param string $str The string to format.
      * @param string $charParse The format to use for the date.
-     * @param bool $incudeDay The formatted date.
+     * @param bool $includeDay The formatted date.
      * @return string The formatted date.
      */
-    public static function formatStringToDate($str, $charParse = '/', $incudeDay = false) {
+    public static function formatStringToDate($str, $charParse = '/', $includeDay = false) {
         $result = '';
         if (! empty($str)) {
             $year = substr($str, 0, 4);
             $month = substr($str, 4, 2);
             $result = $year . $charParse . $month;
-            if ($incudeDay == true) {
+
+            if ($includeDay == true) {
                 $day = substr($str, 6, 2);
                 $result = $result . $charParse . $day;
             }

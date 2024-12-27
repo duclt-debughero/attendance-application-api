@@ -4,13 +4,22 @@ namespace App\Services;
 
 use App\Libs\ConfigUtil;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{Log, Validator};
 
 class CsvFileImportService
 {
+    /**
+     * Summary of CHUNK
+     *
+     * @var int
+     */
     const CHUNK = 100;
 
+    /**
+     * Summary of errors
+     *
+     * @var array
+     */
     private $errors = [];
 
     /**

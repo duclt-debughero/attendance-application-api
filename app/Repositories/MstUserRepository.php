@@ -2,10 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Libs\{
-    EncryptUtil,
-    ValueUtil,
-};
+use App\Libs\EncryptUtil;
 use App\Models\MstUser;
 use Carbon\Carbon;
 use Exception;
@@ -94,9 +91,10 @@ class MstUserRepository extends BaseRepository
                         ->whereValidDelFlg();
                 })
                 ->where('mst_user.user_id', $userId)
-                ->whereValidDelFlg();
+                ->whereValidDelFlg()
+                ->first();
 
-            return $query->first();
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 
@@ -138,7 +136,7 @@ class MstUserRepository extends BaseRepository
      */
     public function getUserByEmailAddress($emailAddress) {
         try {
-            $result = MstUser::query()
+            $query = MstUser::query()
                 ->select([
                     'mst_user.user_id',
                     'mst_user.email_address',
@@ -160,7 +158,7 @@ class MstUserRepository extends BaseRepository
                 ->whereValidDelFlg()
                 ->first();
 
-            return $result;
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 
@@ -176,7 +174,7 @@ class MstUserRepository extends BaseRepository
      */
     public function loginWithAccessToken($accessToken) {
         try {
-            $mstUser = MstUser::query()
+            $query = MstUser::query()
                 ->join('device_user', function ($join) use ($accessToken) {
                     $join
                         ->on('device_user.user_id', '=', 'mst_user.user_id')
@@ -186,7 +184,7 @@ class MstUserRepository extends BaseRepository
                 ->whereValidDelFlg()
                 ->first();
 
-            return $mstUser;
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 
@@ -221,13 +219,13 @@ class MstUserRepository extends BaseRepository
      */
     public function getUserByPasswordToken($passwordToken) {
         try {
-            $mstUser = MstUser::query()
+            $query = MstUser::query()
                 ->where('password_token', $passwordToken)
                 ->where('password_token_expire', '>=', Carbon::now())
                 ->whereValidDelFlg()
                 ->first();
 
-            return $mstUser;
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 

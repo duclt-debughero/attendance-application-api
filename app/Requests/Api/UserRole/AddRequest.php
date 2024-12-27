@@ -4,7 +4,6 @@ namespace App\Requests\Api\UserRole;
 
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\MaxLength;
-use Illuminate\Http\Request;
 
 class AddRequest extends BaseApiRequest
 {
@@ -13,7 +12,7 @@ class AddRequest extends BaseApiRequest
      *
      * @return array
      */
-    public function rules(Request $request) {
+    public function rules() {
         return [
             'user_role_name' => [
                 'required',

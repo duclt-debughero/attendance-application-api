@@ -30,7 +30,7 @@ class FormatDate implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (!empty($value) && !$this->isValidDate($value)) {
+        if (! empty($value) && ! $this->isValidDate($value)) {
             $fail(ConfigUtil::getMessage('ECL010', [':attribute']));
         }
     }
@@ -45,7 +45,7 @@ class FormatDate implements ValidationRule
         try {
             $date = Carbon::createFromFormat($this->format, $value);
 
-            return $date->format($this->format) === $value;
+            return $date->format($this->format) == $value;
         } catch (Exception $e) {
             Log::error($e);
 

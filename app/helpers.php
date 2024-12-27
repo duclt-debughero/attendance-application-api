@@ -171,11 +171,11 @@ if (! function_exists('formatStringToDate')) {
      *
      * @param string $str The string to format.
      * @param string $charParse The format to use for the date.
-     * @param bool $incudeDay The formatted date.
+     * @param bool $includeDay The formatted date.
      * @return string The formatted date.
      */
-    function formatStringToDate($str, $charParse = '/', $incudeDay = false) {
-        return ValueUtil::formatStringToDate($str, $charParse, $incudeDay);
+    function formatStringToDate($str, $charParse = '/', $includeDay = false) {
+        return ValueUtil::formatStringToDate($str, $charParse, $includeDay);
     }
 }
 

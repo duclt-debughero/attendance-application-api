@@ -24,3 +24,5 @@ disable_flg:
   1: INVALID|INVALID
 
 updated_by_not_logged_in: 0
+
+pagination_limit: 100

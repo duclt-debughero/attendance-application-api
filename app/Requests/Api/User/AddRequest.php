@@ -32,11 +32,10 @@ class AddRequest extends BaseApiRequest
      * @return array
      */
     public function rules(Request $request) {
-        return [
+        $rules = [
             'email_address' => [
                 'required',
                 new MailRfc(),
-                new UniqueUser($this->mstUserRepository, $request->email_address),
                 new MaxLength(255),
             ],
             'password' => [
@@ -56,9 +55,18 @@ class AddRequest extends BaseApiRequest
             ],
             'user_role_id' => [
                 'required',
-                new ValidUserRole($this->userRoleRepository, $request->user_role_id),
             ],
         ];
+
+        if ($request->has('email_address') && $request->email_address) {
+            $rules['email_address'][] = new UniqueUser($this->mstUserRepository, $request->email_address);
+        }
+
+        if ($request->has('user_role_id') && $request->user_role_id) {
+            $rules['user_role_id'][] = new ValidUserRole($this->userRoleRepository, $request->user_role_id);
+        }
+
+        return $rules;
     }
 
     /**
@@ -82,9 +90,9 @@ class AddRequest extends BaseApiRequest
      * @return array
      */
     public function messages() {
-        $parrentMessage = parent::messages();
+        $parentMessage = parent::messages();
 
-        return array_merge($parrentMessage, [
+        return array_merge($parentMessage, [
             'password.different' => ConfigUtil::getMessage('ECL029'),
         ]);
     }

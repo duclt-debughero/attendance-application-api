@@ -40,8 +40,8 @@ class AuthorizeService
     /**
      * Retrieves the current user's permission type for a specific menu.
      *
-     * @param int $userRoleId The ID of the user's role.
-     * @param int $menuId The ID of the menu.
+     * @param string|int $userRoleId The ID of the user's role.
+     * @param string|int $menuId The ID of the menu.
      * @return int The permission type of the current user for the specified menu.
      */
     public function getCurrentUserPermissionType($userRoleId, $menuId) {
@@ -50,7 +50,7 @@ class AuthorizeService
         // If the role permission is not found or invalid, return the default permission type
         if (
             ! isset($rolePermission)
-            || empty($rolePermission->permission_type)
+            || ! isset($rolePermission->permission_type)
             || ! $this->isValidPermissionType($rolePermission->permission_type)
         ) {
             return $this->defaultPermissionType;
@@ -72,9 +72,9 @@ class AuthorizeService
     }
 
     /**
-     * Retrieves a list of role permission menus for a given user_role_id.
+     * Retrieves a list of role permission menus for a given user role id.
      *
-     * @param int $userRoleId The ID of the user role.
+     * @param string|int $userRoleId The ID of the user role.
      * @return mixed A collection of role permission menus or false on failure.
      */
     public function getRolePermissionMenus($userRoleId) {
@@ -84,7 +84,7 @@ class AuthorizeService
     /**
      * Filters the list of role permission menus to only include those with permission types that allow showing.
      *
-     * @param int $userRoleId
+     * @param string|int $userRoleId
      * @param \Illuminate\Support\Collection $rolePermissionMenus A collection of role permission menus.
      * @return array A list of menu_id that can be shown.
      */
@@ -93,21 +93,17 @@ class AuthorizeService
             return [];
         }
 
-        $filteredrolePermissionMenus = $rolePermissionMenus;
-
+        $filteredRolePermissionMenus = $rolePermissionMenus;
         if ($userRoleId !== null) {
-            $filteredrolePermissionMenus = $rolePermissionMenus->filter(function ($rolePermissionMenu) {
-                return in_array(
-                    $rolePermissionMenu->permission_type,
-                    [
-                        ValueUtil::constToValue('role_permission.permission_type.REGISTER'),
-                        ValueUtil::constToValue('role_permission.permission_type.READ_ONLY'),
-                    ],
-                );
+            $filteredRolePermissionMenus = $rolePermissionMenus->filter(function ($rolePermissionMenu) {
+                return in_array($rolePermissionMenu->permission_type, [
+                    ValueUtil::constToValue('role_permission.permission_type.REGISTER'),
+                    ValueUtil::constToValue('role_permission.permission_type.READ_ONLY'),
+                ]);
             });
         }
 
-        return $filteredrolePermissionMenus->pluck('menu_id')->all();
+        return $filteredRolePermissionMenus->pluck('menu_id')->all();
     }
 
     /**
@@ -136,7 +132,7 @@ class AuthorizeService
     /**
      * Get list menu id can be showing
      *
-     * @param int $userRoleId
+     * @param string|int $userRoleId
      * @return array
      */
     public function getListMenuIdCanBeShowing($userRoleId) {

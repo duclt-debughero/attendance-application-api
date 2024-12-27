@@ -15,13 +15,13 @@ class RolePermissionRepository extends BaseRepository
     /**
      * Get role permission By user role id and menu id
      *
-     * @param int $userRoleId
-     * @param int $menuId
+     * @param string|int $userRoleId
+     * @param string|int $menuId
      * @return mixed
      */
     public function getRolePermissionByUserRoleIdAndMenuId($userRoleId, $menuId) {
         try {
-            $rolePermission = RolePermission::query()
+            $query = RolePermission::query()
                 ->join('role_menu', function ($join) {
                     $join
                         ->on('role_menu.menu_id', '=', 'role_permission.menu_id')
@@ -37,7 +37,7 @@ class RolePermissionRepository extends BaseRepository
                 ->whereValidDelFlg()
                 ->first();
 
-            return $rolePermission;
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 

@@ -29,7 +29,7 @@ class M001 extends Mailable
      */
     public function envelope(): Envelope {
         return new Envelope(
-            subject: '[Attendance Application] Password Reset Request',
+            subject: '[Attendance Application] Password Reset Requirement',
         );
     }
 

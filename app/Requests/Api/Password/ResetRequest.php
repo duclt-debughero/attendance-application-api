@@ -53,9 +53,9 @@ class ResetRequest extends BaseApiRequest
      * @return array
      */
     public function messages() {
-        $parrentMessage = parent::messages();
+        $parentMessage = parent::messages();
 
-        return array_merge($parrentMessage, [
+        return array_merge($parentMessage, [
             'password_confirmation.same' => ConfigUtil::getMessage('ECL030'),
         ]);
     }
