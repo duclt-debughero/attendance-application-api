@@ -182,4 +182,57 @@ class UserRoleService
             return false;
         }
     }
+
+    /**
+     * Handle delete user role
+     *
+     * @param string|int $userRoleId
+     * @return mixed
+     */
+    public function handleDeleteUserRole($userRoleId) {
+        DB::beginTransaction();
+        try {
+            $userLogin = Auth::user();
+            $userLoginId = $userLogin->user_id;
+            $now = Carbon::now();
+            $delFlgInvalid = ValueUtil::constToValue('common.del_flg.INVALID');
+
+            // Delete user role
+            $userRole = $this->userRoleRepository->deleteById($userRoleId);
+            if (empty($userRole)) {
+                DB::rollBack();
+                return false;
+            }
+
+            // Delete role permission
+            $roleMenus = $this->roleMenuRepository->getAllRoleMenu();
+            foreach ($roleMenus as $roleMenu) {
+                $deleteRolePermissionData = [
+                    'del_flg' => $delFlgInvalid,
+                    'updated_at' => $now,
+                    'updated_by' => $userLoginId,
+                    'deleted_at' => $now,
+                    'deleted_by' => $userLoginId,
+                ];
+
+                $rolePermission = $this->rolePermissionRepository->updateRolePermission(
+                    $userRoleId,
+                    $roleMenu->menu_id,
+                    $deleteRolePermissionData,
+                );
+
+                if (empty($rolePermission)) {
+                    DB::rollBack();
+                    return false;
+                }
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
 }
