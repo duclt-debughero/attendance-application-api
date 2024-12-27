@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\RolePermission;
 use Exception;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{DB, Log};
 
 class RolePermissionRepository extends BaseRepository
 {
@@ -13,7 +13,7 @@ class RolePermissionRepository extends BaseRepository
     }
 
     /**
-     * Get role_permission By user_role_id and menu_id
+     * Get role permission By user role id and menu id
      *
      * @param int $userRoleId
      * @param int $menuId
@@ -40,6 +40,38 @@ class RolePermissionRepository extends BaseRepository
             return $rolePermission;
         } catch (Exception $e) {
             Log::error($e);
+
+            return false;
+        }
+    }
+
+    /**
+     * Update role permission
+     *
+     * @param string|int $userRoleId
+     * @param string|int $menuId
+     * @param array $params
+     * @return mixed
+     */
+    public function updateRolePermission($userRoleId, $menuId, $params) {
+        DB::beginTransaction();
+        try {
+            $rolePermission = RolePermission::query()
+                ->where('role_permission.user_role_id', $userRoleId)
+                ->where('role_permission.menu_id', $menuId)
+                ->whereValidDelFlg()
+                ->first();
+
+            if (! $rolePermission->update($params)) {
+                DB::rollBack();
+                return false;
+            }
+
+            DB::commit();
+            return $rolePermission;
+        } catch (Exception $e) {
+            Log::error($e);
+            DB::rollBack();
 
             return false;
         }

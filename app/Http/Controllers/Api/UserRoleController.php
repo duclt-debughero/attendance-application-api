@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\UserRoleRepository;
-use App\Requests\Api\UserRole\AddRequest;
+use App\Requests\Api\UserRole\{
+    AddRequest,
+    EditRequest,
+};
 use App\Services\UserRoleService;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,7 +34,7 @@ class UserRoleController extends ApiBaseController
 
             // Get user role list by params search
             $userRoles = $this->userRoleRepository->search($params);
-            if (empty($userRoles)) {
+            if ($userRoles->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
             }
 
@@ -57,7 +60,7 @@ class UserRoleController extends ApiBaseController
         try {
             // Get user role by user role id
             $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRoleId);
-            if (empty($userRole)) {
+            if ($userRole->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
             }
 
@@ -85,7 +88,7 @@ class UserRoleController extends ApiBaseController
 
             // Create user role and role permission
             $userRole = $this->userRoleService->handleCreateUserRole($params);
-            if (empty($userRole)) {
+            if ($userRole->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
@@ -105,11 +108,35 @@ class UserRoleController extends ApiBaseController
      * Role Update
      * POST /api/v1/role/update
      *
-     * @param Request $request
+     * @param EditRequest $request
      * @param string|int $userRoleId
      */
-    public function update(Request $request, $userRoleId) {
-        return ApiBusUtil::successResponse();
+    public function update(EditRequest $request, $userRoleId) {
+        try {
+            $params = $request->only(['user_role_name', 'role_permissions']);
+
+            // Get user role by user role id
+            $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRoleId);
+            if ($userRole->isEmpty()) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Update user role and role permission
+            $userRole = $this->userRoleService->handleUpdateUserRole($userRoleId, $params);
+            if ($userRole->isEmpty()) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for user role detail
+            $userRole = $this->userRoleService->convertDataUserRole($userRole);
+            $userRole = reset($userRole);
+
+            return ApiBusUtil::successResponse($userRole);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**

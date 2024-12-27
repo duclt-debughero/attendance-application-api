@@ -79,7 +79,7 @@ class DeviceUserRepository extends BaseRepository
     }
 
     /**
-     * Get device by user_id, device_token
+     * Get device by user id, device token
      *
      * @param string|int $userId
      * @param string $deviceToken
