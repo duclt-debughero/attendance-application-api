@@ -42,4 +42,27 @@ class RoleMenuRepository extends BaseRepository
             return false;
         }
     }
+
+    /**
+     * Get all role menu
+     *
+     * @return mixed
+     */
+    public function getAllRoleMenu() {
+        try {
+            $query = RoleMenu::query()
+                ->select([
+                    'role_menu.menu_id',
+                    'role_menu.menu_name',
+                ])
+                ->whereValidDelFlg()
+                ->get();
+
+            return $query;
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\UserRoleRepository;
+use App\Requests\Api\UserRole\AddRequest;
 use App\Services\UserRoleService;
 use Exception;
 use Illuminate\Http\Request;
@@ -76,10 +77,28 @@ class UserRoleController extends ApiBaseController
      * Role Create
      * POST /api/v1/role/create
      *
-     * @param Request $request
+     * @param AddRequest $request
      */
-    public function create(Request $request) {
-        return ApiBusUtil::successResponse();
+    public function create(AddRequest $request) {
+        try {
+            $params = $request->only(['user_role_name', 'role_permissions']);
+
+            // Create user role and role permission
+            $userRole = $this->userRoleService->handleCreateUserRole($params);
+            if (empty($userRole)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for user role detail
+            $userRole = $this->userRoleService->convertDataUserRole($userRole);
+            $userRole = reset($userRole);
+
+            return ApiBusUtil::successResponse($userRole);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 
     /**

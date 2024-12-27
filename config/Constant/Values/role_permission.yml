@@ -2,3 +2,5 @@ permission_type:
   1: No Access|NO_ACCESS
   2: Read Only|READ_ONLY
   3: Register|REGISTER
+
+default_permission_type: 1

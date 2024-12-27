@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class UserRole
  *
  * @property int $user_role_id
- * @property string $role_name
+ * @property string $user_role_name
  * @property int|null $del_flg
  * @property Carbon|null $created_at
  * @property int|null $created_by
@@ -26,6 +26,8 @@ class UserRole extends Model
     use ObservantTrait;
 
     protected $table = 'user_role';
+
+    protected $primaryKey = 'user_role_id';
 
     protected $casts = [
         'del_flg' => 'int',
