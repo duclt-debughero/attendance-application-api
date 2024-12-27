@@ -12,8 +12,9 @@ use App\Repositories\{
     RolePermissionRepository,
     UserRoleRepository,
 };
+use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\{DB, Log};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 
 class UserRoleService
 {
@@ -75,6 +76,7 @@ class UserRoleService
      * @return mixed
      */
     public function handleCreateUserRole($params) {
+        DB::beginTransaction();
         try {
             // Create user role
             $userRole = $this->userRoleRepository->create(['user_role_name' => $params['user_role_name']]);
@@ -102,6 +104,70 @@ class UserRoleService
                 if (empty($rolePermission)) {
                     DB::rollBack();
                     return false;
+                }
+            }
+
+            // Get user role by user role id
+            $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRole->user_role_id);
+
+            DB::commit();
+            return $userRole;
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
+
+    /**
+     * Handle update user role
+     *
+     * @param string|int $userRoleId
+     * @param array $params
+     * @return mixed
+     */
+    public function handleUpdateUserRole($userRoleId, $params) {
+        DB::beginTransaction();
+        try {
+            $userLogin = Auth::user();
+            $userLoginId = $userLogin->user_id;
+            $now = Carbon::now();
+
+            // Update user role
+            $userRole = $this->userRoleRepository->update($userRoleId, ['user_role_name' => $params['user_role_name']]);
+            if (empty($userRole)) {
+                DB::rollBack();
+                return false;
+            }
+
+            // Set default permission type
+            $defaultPermissionType = ValueUtil::get('role_permission.default_permission_type');
+            $permissionTypes = ValueUtil::getList('role_permission.permission_type');
+
+            // Update role permission
+            $roleMenus = $this->roleMenuRepository->getAllRoleMenu();
+            foreach ($roleMenus as $roleMenu) {
+                if (isset($params['role_permissions'][$roleMenu->menu_id])) {
+                    // Set permission type
+                    $permissionType = $params['role_permissions'][$roleMenu->menu_id];
+                    $permissionType = isset($permissionTypes[$permissionType]) ? $permissionType : $defaultPermissionType;
+
+                    $updateRolePermissionData = [
+                        'permission_type' => $permissionType,
+                        'updated_at' => $now,
+                        'updated_by' => $userLoginId,
+                    ];
+
+                    $rolePermission = $this->rolePermissionRepository->updateRolePermission(
+                        $userRoleId,
+                        $roleMenu->menu_id,
+                        $updateRolePermissionData,
+                    );
+
+                    if (empty($rolePermission)) {
+                        DB::rollBack();
+                        return false;
+                    }
                 }
             }
 

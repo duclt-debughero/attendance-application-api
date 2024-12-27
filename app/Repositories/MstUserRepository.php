@@ -18,7 +18,7 @@ class MstUserRepository extends BaseRepository
     }
 
     /**
-     * Search for mst_user
+     * Search for mst user
      *
      * @param array $params
      * @return mixed
@@ -108,7 +108,7 @@ class MstUserRepository extends BaseRepository
      * Check email address unique
      *
      * @param string $emailAddress
-     * @param string $excluded exclude a record by user_id
+     * @param string $excluded exclude a record by user id
      * @param mixed|null $excludedId
      * @return bool
      */
@@ -169,7 +169,7 @@ class MstUserRepository extends BaseRepository
     }
 
     /**
-     * Login web using access_token
+     * Login web using access token
      *
      * @param string $accessToken
      * @return mixed
