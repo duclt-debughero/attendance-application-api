@@ -2,7 +2,10 @@
 
 namespace App\Rules;
 
-use App\Libs\ConfigUtil;
+use App\Libs\{
+    ConfigUtil,
+    DateUtil,
+};
 use Carbon\Carbon;
 use Closure;
 use Exception;
@@ -30,7 +33,7 @@ class FutureHour implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
         try {
-            $inputDate = formatDate('H:i', $value);
+            $inputDate = DateUtil::formatDateTime($value, 'H:i');
             $nowDate = Carbon::now()->format('H:i');
 
             if ($inputDate < $nowDate) {
