@@ -16,7 +16,7 @@ class Required implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (!isset($value) || (is_array($value) && count($value) === 0) || (!is_array($value) && trim((string)$value) === '')) {
+        if (! isset($value) || (is_array($value) && count($value) == 0) || (! is_array($value) && trim((string)$value) == '')) {
             $fail(ConfigUtil::getMessage('ECL001', [':attribute']));
         }
     }

@@ -3,7 +3,10 @@
 namespace App\Requests\Api;
 
 use App\Enums\ApiCodeNo;
-use App\Libs\{ApiBusUtil, ConfigUtil};
+use App\Libs\{
+    ApiBusUtil,
+    ConfigUtil,
+};
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;

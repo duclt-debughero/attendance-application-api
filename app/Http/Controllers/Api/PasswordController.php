@@ -38,8 +38,8 @@ class PasswordController extends ApiBaseController
             }
 
             // Update password token and send email
-            $user = $this->passwordService->updatePasswordToken($user);
-            if (empty($user)) {
+            $updatedUser = $this->passwordService->updatePasswordToken($user);
+            if ($updatedUser === false) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 

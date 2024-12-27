@@ -18,7 +18,7 @@ class DeviceUserRepository extends BaseRepository
     /**
      * Create or update login token for API Login
      *
-     * @param int $userId
+     * @param string|int $userId
      * @param string $deviceToken
      * @return mixed
      */

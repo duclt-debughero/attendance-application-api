@@ -45,6 +45,7 @@ class UserController extends ApiBaseController
 
             // Convert data for user list
             $users = $this->mstUserService->convertDataUserList($users);
+            $users = $this->pagination($users)->toArray();
 
             return ApiBusUtil::successResponse($users);
         } catch (Exception $e) {
@@ -96,13 +97,7 @@ class UserController extends ApiBaseController
                 'user_role_id',
             ]);
 
-            // Get user by email address
-            $user = $this->mstUserRepository->getUserByEmailAddress($params['email_address']);
-            if (! empty($user)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
-            }
-
-            // Add user
+            // Create user
             $user = $this->mstUserRepository->create($params);
             if (empty($user)) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);

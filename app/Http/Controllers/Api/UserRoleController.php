@@ -40,6 +40,7 @@ class UserRoleController extends ApiBaseController
 
             // Convert data for user role list
             $userRoles = $this->userRoleService->convertDataUserRole($userRoles);
+            $userRoles = $this->pagination($userRoles)->toArray();
 
             return ApiBusUtil::successResponse($userRoles);
         } catch (Exception $e) {
@@ -156,7 +157,7 @@ class UserRoleController extends ApiBaseController
 
             // Delete user role and role permission
             $userRole = $this->userRoleService->handleDeleteUserRole($userRoleId);
-            if (empty($userRole)) {
+            if ($userRole === false) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 

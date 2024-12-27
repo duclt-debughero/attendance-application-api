@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Closure;
 use Exception;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Facades\Log;
 
 class FutureHour implements ValidationRule
 {
@@ -40,6 +41,8 @@ class FutureHour implements ValidationRule
                 $fail(ConfigUtil::getMessage('ECL026', [$this->label, 'Current time']));
             }
         } catch (Exception $e) {
+            Log::error($e);
+
             $fail(ConfigUtil::getMessage('ECL026', [$this->label, 'Current time']));
         }
     }
