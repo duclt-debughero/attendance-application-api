@@ -7,7 +7,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class RequiredIf implements ValidationRule
 {
-
     /**
      * Create a new rule instance.
      *

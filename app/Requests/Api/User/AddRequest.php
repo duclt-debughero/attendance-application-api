@@ -3,7 +3,10 @@
 namespace App\Requests\Api\User;
 
 use App\Libs\ConfigUtil;
-use App\Repositories\MstUserRepository;
+use App\Repositories\{
+    MstUserRepository,
+    UserRoleRepository,
+};
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\{
     MailRfc,
@@ -11,6 +14,7 @@ use App\Rules\{
     MinLength,
     UniqueUser,
     ValidPassword,
+    ValidUserRole,
 };
 use Illuminate\Http\Request;
 
@@ -18,6 +22,7 @@ class AddRequest extends BaseApiRequest
 {
     public function __construct(
         private MstUserRepository $mstUserRepository,
+        private UserRoleRepository $userRoleRepository,
     ) {
     }
 
@@ -49,7 +54,10 @@ class AddRequest extends BaseApiRequest
                 'nullable',
                 new MaxLength(20),
             ],
-            'user_role_id' => 'required',
+            'user_role_id' => [
+                'required',
+                new ValidUserRole($this->userRoleRepository, $request->user_role_id),
+            ],
         ];
     }
 
