@@ -102,7 +102,7 @@ class UserController extends ApiBaseController
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
-            // Add user to database
+            // Add user
             $user = $this->mstUserRepository->create($params);
             if (empty($user)) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
@@ -147,7 +147,7 @@ class UserController extends ApiBaseController
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
-            // Update user to database
+            // Update user
             $user = $this->mstUserRepository->update($userId, $params);
             if (empty($user)) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
@@ -180,7 +180,7 @@ class UserController extends ApiBaseController
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
-            // Delete user to database
+            // Delete user
             $user = $this->mstUserRepository->deleteById($userId);
             if (empty($user)) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);

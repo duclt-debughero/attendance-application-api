@@ -147,6 +147,24 @@ class UserRoleController extends ApiBaseController
      * @param string|int $userRoleId
      */
     public function delete(Request $request, $userRoleId) {
-        return ApiBusUtil::successResponse();
+        try {
+            // Get user role by user role id
+            $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRoleId);
+            if ($userRole->isEmpty()) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Delete user role and role permission
+            $userRole = $this->userRoleService->handleDeleteUserRole($userRoleId);
+            if (empty($userRole)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            return ApiBusUtil::successResponse();
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+        }
     }
 }
