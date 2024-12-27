@@ -61,12 +61,10 @@ class FileUtil
      * Get all files that has prefix in a directory on S3
      *
      * @param string $path path to the directory
-     * @param string $prefix
-     * @param array $options
-     * @param mixed $option
-     * @return array|string|null files matches pattern in this directory
+     * @param mixed $prefix
+     * @return array files matches pattern in this directory
      */
-    public static function searchS3ByPrefix($path, $prefix, $option = []) {
+    public static function searchS3ByPrefix($path, $prefix) {
         try {
             $client = Storage::disk('s3')->getClient();
             $command = $client->getCommand('ListObjectsV2');
@@ -74,13 +72,11 @@ class FileUtil
             $command['Prefix'] = $path . $prefix;
             $result = $client->execute($command);
 
-            if (! empty($option['isGetLastModifiedFile'])) {
-                return self::getLastModifiedFile($result['Contents']);
-            }
-
             return array_column($result['Contents'] ?? [], 'Key');
         } catch (Exception $e) {
             Log::error($e);
+
+            return [];
         }
     }
 
@@ -98,6 +94,35 @@ class FileUtil
 
             return false;
         }
+    }
+
+    /**
+     * Convert data to csv
+     *
+     * @param array $lstData
+     * @param string $encode
+     * @return string
+     */
+    public static function convertDataCsv($lstData, $encode = 'sjis-win') {
+        $rowContent = 0;
+        $contents = null;
+
+        foreach ($lstData as $index => $data) {
+            $temp = [];
+            foreach ($data as $row) {
+                $row = $row ?? '';
+                $temp[] = '"' . preg_replace('/"/', '""', $row) . '"';
+            }
+
+            if ($rowContent > 0) {
+                $contents .= "\r\n";
+            }
+
+            $contents .= mb_convert_encoding(implode(',', $temp), $encode, 'auto');
+            $rowContent++;
+        }
+
+        return $contents;
     }
 
     /**
