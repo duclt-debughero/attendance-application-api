@@ -102,12 +102,6 @@ class UserController extends ApiBaseController
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
-            // Get user role by user role id
-            $userRole = $this->mstUserRepository->findById($params['user_role_id']);
-            if (empty($userRole)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
-            }
-
             // Add user to database
             $user = $this->mstUserRepository->create($params);
             if (empty($user)) {
@@ -150,12 +144,6 @@ class UserController extends ApiBaseController
             // Get user by user id
             $user = $this->mstUserRepository->getUserByUserId($userId);
             if (empty($user)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
-            }
-
-            // Get user role by user role id
-            $userRole = $this->mstUserRepository->findById($params['user_role_id']);
-            if (empty($userRole)) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 

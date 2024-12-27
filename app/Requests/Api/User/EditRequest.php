@@ -3,21 +3,29 @@
 namespace App\Requests\Api\User;
 
 use App\Libs\ConfigUtil;
+use App\Repositories\UserRoleRepository;
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\{
     MaxLength,
     MinLength,
     ValidPassword,
+    ValidUserRole,
 };
+use Illuminate\Http\Request;
 
 class EditRequest extends BaseApiRequest
 {
+    public function __construct(
+        private UserRoleRepository $userRoleRepository,
+    ) {
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules() {
+    public function rules(Request $request) {
         return [
             'password' => [
                 'nullable',
@@ -38,7 +46,10 @@ class EditRequest extends BaseApiRequest
                 'nullable',
                 new MaxLength(20),
             ],
-            'user_role_id' => 'required',
+            'user_role_id' => [
+                'required',
+                new ValidUserRole($this->userRoleRepository, $request->user_role_id),
+            ],
         ];
     }
 
