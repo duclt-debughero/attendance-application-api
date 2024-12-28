@@ -39,7 +39,7 @@ class UserRoleController extends ApiBaseController
             }
 
             // Convert data for user role list
-            $userRoles = $this->userRoleService->convertDataUserRole($userRoles);
+            $userRoles = $this->userRoleService->convertDataUserRole($userRoles, false);
             $userRoles = $this->pagination($userRoles)->toArray();
 
             return ApiBusUtil::successResponse($userRoles);
@@ -62,12 +62,11 @@ class UserRoleController extends ApiBaseController
             // Get user role by user role id
             $userRole = $this->userRoleRepository->getUserRoleByUserRoleId($userRoleId);
             if ($userRole->isEmpty()) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::URL_NOT_EXISTS);
             }
 
             // Convert data for user role detail
             $userRole = $this->userRoleService->convertDataUserRole($userRole);
-            $userRole = reset($userRole);
 
             return ApiBusUtil::successResponse($userRole);
         } catch (Exception $e) {
@@ -95,7 +94,6 @@ class UserRoleController extends ApiBaseController
 
             // Convert data for user role detail
             $userRole = $this->userRoleService->convertDataUserRole($userRole);
-            $userRole = reset($userRole);
 
             return ApiBusUtil::successResponse($userRole);
         } catch (Exception $e) {
@@ -130,7 +128,6 @@ class UserRoleController extends ApiBaseController
 
             // Convert data for user role detail
             $userRole = $this->userRoleService->convertDataUserRole($userRole);
-            $userRole = reset($userRole);
 
             return ApiBusUtil::successResponse($userRole);
         } catch (Exception $e) {

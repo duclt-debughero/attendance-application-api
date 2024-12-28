@@ -87,7 +87,7 @@ class AuthController extends ApiBaseController
             // Check device
             $device = $this->deviceUserRepository->findById($deviceId);
             if (empty($device) || $device->access_token !== $accessToken) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
             // Update logout token

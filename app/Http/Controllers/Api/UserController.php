@@ -67,7 +67,7 @@ class UserController extends ApiBaseController
             // Get user by user id
             $user = $this->mstUserRepository->getUserByUserId($userId);
             if (empty($user)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::URL_NOT_EXISTS);
             }
 
             // Convert data for user detail
