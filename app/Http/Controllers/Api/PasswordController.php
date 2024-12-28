@@ -34,7 +34,7 @@ class PasswordController extends ApiBaseController
             // Get user by email address
             $user = $this->mstUserRepository->getUserByEmailAddress($emailAddress);
             if (empty($user)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
             // Update password token and send email
@@ -65,7 +65,7 @@ class PasswordController extends ApiBaseController
             // Get user by password token
             $user = $this->mstUserRepository->getUserByPasswordToken($passwordToken);
             if (empty($user)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
             }
 
             // Check password equals email address

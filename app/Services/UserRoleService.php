@@ -29,9 +29,10 @@ class UserRoleService
      * Convert data for user role
      *
      * @param object $userRoles
+     * @param bool $includeFirstElement
      * @return mixed
      */
-    public function convertDataUserRole($userRoles) {
+    public function convertDataUserRole($userRoles, $includeFirstElement = true) {
         $result = [];
 
         foreach ($userRoles as $userRole) {
@@ -66,7 +67,9 @@ class UserRoleService
             });
         }
 
-        return array_values($result);
+        $result = array_values($result);
+
+        return $includeFirstElement ? reset($result) : $result;
     }
 
     /**
