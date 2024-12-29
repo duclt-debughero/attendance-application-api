@@ -35,10 +35,10 @@ ECL035: "The current password is incorrect. Please check the information you ent
 ECL036: Password does not match confirmation password.
 ECL037: Email address or password is incorrect. If you are using it for the first time, please proceed from the new registration button.
 ICL038: There are no new announcements at this time.
-ICL043: You have already registered as a user. Please log in from the login screen.
+ICL043: You have already registered as a user. Please login from the login screen.
 ECL049: The entered emoji cannot be registered.
 ECL050: The value provided for <0> field is not valid. Please review it and try again.
-ECL057: The account you entered has privileges that do not allow you to log in to the management screen. Please check the entered information again or contact your system administrator.
+ECL057: The account you entered has privileges that do not allow you to login to the management screen. Please check the entered information again or contact your system administrator.
 ICL058: The import process is complete.
 ECL059: Import processing failed. Please check <1> on line <0>.
 ECL059_TITLE: Import processing failed.
@@ -52,12 +52,12 @@ ICL070: Please enter <0> characters or less.
 
 API_VALIDATE_PARAMETER: Invalid request parameter.
 API_REQUIRED_PARAMETER: Required request parameters are missing. Please check the parameters.
-API_RECORD_NOT_EXISTS: No matching data found.
+API_RECORD_NOT_EXISTS: No matching data was found.
 API_ACCESS_TOKEN_EXPIRED: The access token has expired.
-API_ISSUE_ACCESS_TOKEN_FAILED: Authentication error. Please log in again.
+API_ISSUE_ACCESS_TOKEN_FAILED: Authentication error. Please login again.
 API_LOGIN_FAILED: "Login failed.\nThe Email address or password you entered may be incorrect.\nPlease check and try again."
-API_NOT_LOGIN: You have logged in on another device. Please log in again.
-API_URL_NOT_EXISTS: No matching URL found.
+API_NOT_LOGIN: You have logged in on another device. Please login again.
+API_URL_NOT_EXISTS: No matching URL was found.
 API_DISABLED_USER_ERROR: Your account is currently disabled.
 API_MAINTENANCE_MODE: Maintenance is currently in progress.
 API_SERVER_ERROR: An internal error occurred.
