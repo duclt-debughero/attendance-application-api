@@ -34,7 +34,7 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
     chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
-ENV APP_HOME /var/www/html
+ENV APP_HOME="/var/www/html"
 
 # Copy source files to the application directory
 COPY . $APP_HOME
