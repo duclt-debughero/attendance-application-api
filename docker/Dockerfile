@@ -30,7 +30,10 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
     chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
-ENV APP_HOME="/var/www/html"
+ENV APP_HOME /var/www/html
+
+# Set working directory
+WORKDIR $APP_HOME
 
 # Copy source files to the application directory
 COPY . $APP_HOME
@@ -39,10 +42,9 @@ COPY . $APP_HOME
 RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run prod
 
 # Set correct permissions for storage and cache directories
-RUN chown -R $user:$user $APP_HOME && \
-    chmod -R 777 $APP_HOME/storage && \
+RUN chmod -R 777 $APP_HOME/storage && \
     chmod -R 777 $APP_HOME/bootstrap/cache && \
-    chown -R $user:$user $APP_HOME/vendor
+    chown -R 777 $APP_HOME/vendor
 
 # Uncomment below for production use
 RUN cd $APP_HOME && php artisan view:clear
