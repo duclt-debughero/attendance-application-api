@@ -24,16 +24,16 @@ RUN install-php-extensions gd pdo_mysql bcmath zip intl opcache exif mbstring
 RUN rm /etc/apache2/sites-available/000-default.conf
 COPY /docker/sites-available/000-default.conf /etc/apache2/sites-available/
 
+# Add custom PHP configuration
+COPY /docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
+
 # Create system user to run Composer and Artisan commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
-    mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer
+RUN chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
 ENV APP_HOME /var/www/html
-
-# Set working directory
-WORKDIR $APP_HOME
 
 # Copy source files to the application directory
 COPY . $APP_HOME
@@ -42,12 +42,12 @@ COPY . $APP_HOME
 RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run prod
 
 # Set correct permissions for storage and cache directories
-RUN chmod -R 777 $APP_HOME/storage && \
-    chmod -R 777 $APP_HOME/bootstrap/cache && \
-    chown -R 777 $APP_HOME/vendor
+RUN chmod -R 777 $APP_HOME/storage
+RUN chmod -R 777 $APP_HOME/bootstrap/cache
+RUN chmod -R 777 $APP_HOME/vendor
 
 # Uncomment below for production use
 RUN cd $APP_HOME && php artisan view:clear
 
 # Set the user to run the application
-USER $user
+USER root
