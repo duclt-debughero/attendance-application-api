@@ -35,10 +35,11 @@ Route::prefix('v1')->group(function () {
 
         // menu_id = 1, menu_name = User List
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['user']['menu_id']])->group(function () {
-            Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
-                Route::prefix('user')->name('user.')->group(function () {
-                    Route::get('/list', [UserController::class, 'list'])->name('list');
-                    Route::get('/detail/{userId}', [UserController::class, 'detail'])->name('detail');
+            Route::prefix('user')->name('user.')->group(function () {
+                Route::get('/list', [UserController::class, 'list'])->name('list');
+                Route::get('/detail/{userId}', [UserController::class, 'detail'])->name('detail');
+
+                Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
                     Route::post('/create', [UserController::class, 'create'])->name('create');
                     Route::post('/update/{userId}', [UserController::class, 'update'])->name('update');
                     Route::post('/delete/{userId}', [UserController::class, 'delete'])->name('delete');
@@ -48,10 +49,11 @@ Route::prefix('v1')->group(function () {
 
         // menu_id = 2, menu_name = Role List
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['role']['menu_id']])->group(function () {
-            Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
-                Route::prefix('role')->name('role.')->group(function () {
-                    Route::get('/list', [UserRoleController::class, 'list'])->name('list');
-                    Route::get('/detail/{userRoleId}', [UserRoleController::class, 'detail'])->name('detail');
+            Route::prefix('role')->name('role.')->group(function () {
+                Route::get('/list', [UserRoleController::class, 'list'])->name('list');
+                Route::get('/detail/{userRoleId}', [UserRoleController::class, 'detail'])->name('detail');
+
+                Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
                     Route::post('/create', [UserRoleController::class, 'create'])->name('create');
                     Route::post('/update/{userRoleId}', [UserRoleController::class, 'update'])->name('update');
                     Route::post('/delete/{userRoleId}', [UserRoleController::class, 'delete'])->name('delete');
@@ -61,10 +63,11 @@ Route::prefix('v1')->group(function () {
 
         // menu_id = 3, menu_name = Event Type List
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['event_type']['menu_id']])->group(function () {
-            Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
-                Route::prefix('event-type')->name('event-type.')->group(function () {
-                    Route::get('/list', [EventTypeController::class, 'list'])->name('list');
-                    Route::get('/detail/{eventTypeId}', [EventTypeController::class, 'detail'])->name('detail');
+            Route::prefix('event-type')->name('event-type.')->group(function () {
+                Route::get('/list', [EventTypeController::class, 'list'])->name('list');
+                Route::get('/detail/{eventTypeId}', [EventTypeController::class, 'detail'])->name('detail');
+
+                Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
                     Route::post('/create', [EventTypeController::class, 'create'])->name('create');
                     Route::post('/update/{eventTypeId}', [EventTypeController::class, 'update'])->name('update');
                     Route::post('/delete/{eventTypeId}', [EventTypeController::class, 'delete'])->name('delete');
