@@ -11,15 +11,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class DeviceUser
+ * Class EventType
  *
- * @property int $device_id
- * @property int $user_id
- * @property string|null $device_token
- * @property string|null $access_token
- * @property Carbon|null $access_token_expire
- * @property string|null $refresh_token
- * @property Carbon|null $refresh_token_expire
+ * @property int $event_type_id
+ * @property string $type_name
+ * @property string $description
  * @property int|null $del_flg
  * @property Carbon|null $created_at
  * @property int|null $created_by
@@ -30,20 +26,17 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class DeviceUser extends Model
+class EventType extends Model
 {
     use ObservantTrait;
 
-    protected $table = 'device_user';
+    protected $table = 'event_type';
 
-    protected $primaryKey = 'device_id';
+    protected $primaryKey = 'event_type_id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $casts = [
-        'user_id' => 'int',
-        'access_token_expire' => 'datetime',
-        'refresh_token_expire' => 'datetime',
         'del_flg' => 'int',
         'created_by' => 'int',
         'updated_by' => 'int',
@@ -51,15 +44,14 @@ class DeviceUser extends Model
     ];
 
     protected $fillable = [
-        'user_id',
-        'device_token',
-        'access_token',
-        'access_token_expire',
-        'refresh_token',
-        'refresh_token_expire',
+        'type_name',
+        'description',
         'del_flg',
+        'created_at',
         'created_by',
+        'updated_at',
         'updated_by',
-        'deleted_by',
+        'deleted_at',
+        'deleted_by'
     ];
 }

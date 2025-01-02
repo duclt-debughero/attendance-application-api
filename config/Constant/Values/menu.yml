@@ -3,3 +3,5 @@ role_menu:
     menu_id: 1
   role:
     menu_id: 2
+  event_type:
+    menu_id: 3

@@ -37,11 +37,11 @@ class MstUser extends Authenticatable
 {
     use ObservantTrait;
 
-    public $timestamps = false;
-
     protected $table = 'mst_user';
 
     protected $primaryKey = 'user_id';
+
+    public $timestamps = false;
 
     protected $casts = [
         'password_token_expire' => 'datetime',

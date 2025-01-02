@@ -29,11 +29,11 @@ class RoleMenu extends Model
 {
     use ObservantTrait;
 
-    public $timestamps = false;
-
     protected $table = 'role_menu';
 
     protected $primaryKey = 'menu_id';
+
+    public $timestamps = false;
 
     protected $casts = [
         'del_flg' => 'int',

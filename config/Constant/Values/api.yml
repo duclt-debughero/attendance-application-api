@@ -14,3 +14,10 @@ route_name_to_api_name:
   role.create: ROLE CREATE
   role.update: ROLE UPDATE
   role.delete: ROLE DELETE
+  event-type.list: EVENT TYPE LIST
+  event-type.detail: EVENT TYPE DETAIL
+  event-type.create: EVENT TYPE CREATE
+  event-type.update: EVENT TYPE UPDATE
+  event-type.delete: EVENT TYPE DELETE
+  event-type.import.csv: EVENT TYPE IMPORT CSV
+  event-type.export.csv: EVENT TYPE EXPORT CSV
