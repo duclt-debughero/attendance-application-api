@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\EventTypeRepository;
+use App\Requests\Api\EventType\AddRequest;
 use App\Services\EventTypeService;
 use Exception;
 use Illuminate\Http\Request;
@@ -76,11 +77,23 @@ class EventTypeController extends ApiBaseController
      * Event Type Create
      * POST /api/v1/event-type/create
      *
-     * @param Request $request
+     * @param AddRequest $request
      */
-    public function create(Request $request) {
+    public function create(AddRequest $request) {
         try {
-            return ApiBusUtil::successResponse();
+            $params = $request->only(['type_name', 'description']);
+
+            // Create event type
+            $eventType = $this->eventTypeRepository->create($params);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for event type detail
+            $eventType = $this->eventTypeRepository->getEventTypeByEventTypeId($eventType->event_type_id);
+            $eventType = $this->eventTypeService->convertDataEventTypeDetail($eventType);
+
+            return ApiBusUtil::successResponse($eventType);
         } catch (Exception $e) {
             Log::error($e);
 
