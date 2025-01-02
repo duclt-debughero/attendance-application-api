@@ -47,11 +47,8 @@ class EventType extends Model
         'type_name',
         'description',
         'del_flg',
-        'created_at',
         'created_by',
-        'updated_at',
         'updated_by',
-        'deleted_at',
-        'deleted_by'
+        'deleted_by',
     ];
 }
