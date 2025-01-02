@@ -35,6 +35,8 @@ class RolePermission extends Model
 
     protected $primaryKey = 'permission_id';
 
+    public $timestamps = false;
+
     protected $casts = [
         'user_role_id' => 'int',
         'menu_id' => 'int',

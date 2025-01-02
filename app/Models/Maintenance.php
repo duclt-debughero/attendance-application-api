@@ -32,11 +32,11 @@ class Maintenance extends Model
 {
     use ObservantTrait;
 
-    public $timestamps = false;
-
     protected $table = 'maintenance';
 
     protected $primaryKey = 'maintenance_id';
+
+    public $timestamps = false;
 
     protected $casts = [
         'start_time' => 'datetime',
