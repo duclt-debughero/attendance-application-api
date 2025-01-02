@@ -148,6 +148,18 @@ class EventTypeController extends ApiBaseController
      */
     public function delete(Request $request, $eventTypeId) {
         try {
+            // Get event type by event type id
+            $eventType = $this->eventTypeRepository->getEventTypeByEventTypeId($eventTypeId);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Delete event type
+            $eventType = $this->eventTypeRepository->deleteById($eventTypeId);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
             return ApiBusUtil::successResponse();
         } catch (Exception $e) {
             Log::error($e);
