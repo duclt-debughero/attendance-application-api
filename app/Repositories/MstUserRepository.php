@@ -15,6 +15,35 @@ class MstUserRepository extends BaseRepository
     }
 
     /**
+     * Get query mst user
+     *
+     * @param array $columns
+     * @return mixed
+     */
+    public function getQueryMstUser($columns = []) {
+        $defaultColumns = [
+            'mst_user.user_id',
+            'mst_user.email_address',
+            'mst_user.user_name',
+            'mst_user.telephone_number',
+            'mst_user.last_login_time',
+            'user_role.user_role_id',
+            'user_role.user_role_name',
+        ];
+
+        $query = MstUser::query()
+            ->select(array_merge($defaultColumns, $columns))
+            ->leftJoin('user_role', function ($join) {
+                $join
+                    ->on('mst_user.user_role_id', '=', 'user_role.user_role_id')
+                    ->whereValidDelFlg();
+            })
+            ->whereValidDelFlg();
+
+        return $query;
+    }
+
+    /**
      * Search for mst user
      *
      * @param array $params
@@ -22,22 +51,7 @@ class MstUserRepository extends BaseRepository
      */
     public function search($params = []) {
         try {
-            $query = MstUser::query()
-                ->select([
-                    'mst_user.user_id',
-                    'mst_user.email_address',
-                    'mst_user.user_name',
-                    'mst_user.telephone_number',
-                    'mst_user.last_login_time',
-                    'user_role.user_role_id',
-                    'user_role.user_role_name',
-                ])
-                ->leftJoin('user_role', function ($join) {
-                    $join
-                        ->on('mst_user.user_role_id', '=', 'user_role.user_role_id')
-                        ->whereValidDelFlg();
-                })
-                ->whereValidDelFlg();
+            $query = $this->getQueryMstUser();
 
             // Search for email address
             if (isset($params['email_address'])) {
@@ -75,26 +89,9 @@ class MstUserRepository extends BaseRepository
      */
     public function getUserByUserId($userId) {
         try {
-            $query = MstUser::query()
-                ->select([
-                    'mst_user.user_id',
-                    'mst_user.email_address',
-                    'mst_user.user_name',
-                    'mst_user.telephone_number',
-                    'mst_user.last_login_time',
-                    'user_role.user_role_id',
-                    'user_role.user_role_name',
-                ])
-                ->leftJoin('user_role', function ($join) {
-                    $join
-                        ->on('mst_user.user_role_id', '=', 'user_role.user_role_id')
-                        ->whereValidDelFlg();
-                })
-                ->where('mst_user.user_id', $userId)
-                ->whereValidDelFlg()
-                ->first();
+            $query = $this->getQueryMstUser()->where('mst_user.user_id', $userId);
 
-            return $query;
+            return $query->first();
         } catch (Exception $e) {
             Log::error($e);
 
