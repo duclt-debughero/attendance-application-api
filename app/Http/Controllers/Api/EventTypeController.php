@@ -55,7 +55,16 @@ class EventTypeController extends ApiBaseController
      */
     public function detail(Request $request, $eventTypeId) {
         try {
-            return ApiBusUtil::successResponse();
+            // Get event type by event type id
+            $eventType = $this->eventTypeRepository->getEventTypeByEventTypeId($eventTypeId);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::URL_NOT_EXISTS);
+            }
+
+            // Convert data for event type detail
+            $eventType = $this->eventTypeService->convertDataEventTypeDetail($eventType);
+
+            return ApiBusUtil::successResponse($eventType);
         } catch (Exception $e) {
             Log::error($e);
 
