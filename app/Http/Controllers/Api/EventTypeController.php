@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\EventTypeRepository;
-use App\Requests\Api\EventType\AddRequest;
+use App\Requests\Api\EventType\{
+    AddRequest,
+    EditRequest
+};
 use App\Services\EventTypeService;
 use Exception;
 use Illuminate\Http\Request;
@@ -105,12 +108,30 @@ class EventTypeController extends ApiBaseController
      * Event Type Update
      * POST /api/v1/event-type/update
      *
-     * @param Request $request
+     * @param EditRequest $request
      * @param string|int $eventTypeId
      */
-    public function update(Request $request, $eventTypeId) {
+    public function update(EditRequest $request, $eventTypeId) {
         try {
-            return ApiBusUtil::successResponse();
+            $params = $request->only(['type_name', 'description']);
+
+            // Get event type by event type id
+            $eventType = $this->eventTypeRepository->getEventTypeByEventTypeId($eventTypeId);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Update event type
+            $eventType = $this->eventTypeRepository->update($eventTypeId, $params);
+            if (empty($eventType)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for event type detail
+            $eventType = $this->eventTypeRepository->getEventTypeByEventTypeId($eventType->event_type_id);
+            $eventType = $this->eventTypeService->convertDataEventTypeDetail($eventType);
+
+            return ApiBusUtil::successResponse($eventType);
         } catch (Exception $e) {
             Log::error($e);
 
