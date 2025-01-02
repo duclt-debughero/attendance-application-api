@@ -34,7 +34,7 @@ class ConfigUtil
         $message = self::getConfig(self::MESSAGE_DIR, $key);
         if ($message && is_string($message)) {
             foreach ($paramArray as $param => $value) {
-                $message = str_replace(sprintf('{%s}', $param), $value, $message);
+                $message = str_replace(sprintf('<%d>', $param), $value, $message);
             }
         }
 
