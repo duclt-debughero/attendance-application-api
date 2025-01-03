@@ -1,0 +1,9 @@
+export_csv_event_type:
+  fileName: EventType
+  fieldConfig:
+    event_type_id:
+      title: Event Type ID
+    type_name:
+      title: Event Type Name
+    description:
+      title: Description

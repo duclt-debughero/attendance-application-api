@@ -73,7 +73,7 @@ class UserRoleRepository extends BaseRepository
                 $query->where('user_role.user_role_name', 'like', "%{$params['user_role_name']}%");
             }
 
-            return $query->get();
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 

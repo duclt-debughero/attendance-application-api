@@ -38,7 +38,7 @@ class UserController extends ApiBaseController
             ]);
 
             // Get user list by params search
-            $users = $this->mstUserRepository->search($params);
+            $users = $this->mstUserRepository->search($params)->get();
             if ($users->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
             }

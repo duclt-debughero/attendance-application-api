@@ -66,13 +66,13 @@ Route::prefix('v1')->group(function () {
             Route::prefix('event-type')->name('event-type.')->group(function () {
                 Route::get('/list', [EventTypeController::class, 'list'])->name('list');
                 Route::get('/detail/{eventTypeId}', [EventTypeController::class, 'detail'])->name('detail');
+                Route::post('/export/csv', [EventTypeController::class, 'exportCsv'])->name('export.csv');
 
                 Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
                     Route::post('/create', [EventTypeController::class, 'create'])->name('create');
                     Route::post('/update/{eventTypeId}', [EventTypeController::class, 'update'])->name('update');
                     Route::post('/delete/{eventTypeId}', [EventTypeController::class, 'delete'])->name('delete');
                     Route::post('/import/csv', [EventTypeController::class, 'importCsv'])->name('import.csv');
-                    Route::post('/export/csv', [EventTypeController::class, 'exportCsv'])->name('export.csv');
                 });
             });
         });

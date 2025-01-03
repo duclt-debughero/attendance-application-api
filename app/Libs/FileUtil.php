@@ -103,7 +103,7 @@ class FileUtil
      * @param string $encode
      * @return string
      */
-    public static function convertDataCsv($lstData, $encode = 'sjis-win') {
+    public static function convertDataCsv($lstData, $encode = 'UTF-8') {
         $rowContent = 0;
         $contents = null;
 

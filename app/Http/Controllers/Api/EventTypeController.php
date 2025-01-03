@@ -2,25 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\ApiCodeNo;
-use App\Enums\ApiStatusCode;
-use App\Libs\ApiBusUtil;
+use App\Enums\{
+    ApiCodeNo,
+    ApiStatusCode,
+};
+use App\Libs\{
+    ApiBusUtil,
+    ConfigUtil,
+};
 use App\Repositories\EventTypeRepository;
 use App\Requests\Api\EventType\{
     AddRequest,
     EditRequest,
     ImportCsvRequest,
 };
-use App\Services\EventTypeService;
+use App\Services\{
+    CsvFileExportService,
+    EventTypeService,
+};
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{Log, Response};
 
 class EventTypeController extends ApiBaseController
 {
     public function __construct(
         private EventTypeRepository $eventTypeRepository,
-        private EventTypeService $eventTypeService
+        private CsvFileExportService $csvFileExportService,
+        private EventTypeService $eventTypeService,
     ) {
     }
 
@@ -35,7 +44,7 @@ class EventTypeController extends ApiBaseController
             $params = $request->only(['type_name']);
 
             // Get event type list by params search
-            $eventTypes = $this->eventTypeRepository->search($params);
+            $eventTypes = $this->eventTypeRepository->search($params)->get();
             if ($eventTypes->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
             }
@@ -203,7 +212,33 @@ class EventTypeController extends ApiBaseController
      */
     public function exportCsv(Request $request) {
         try {
-            return ApiBusUtil::successResponse();
+            $exportCSVKey = 'export_csv_event_type';
+
+            // Define the directory path for retrieving CSV export configurations using the provided export key
+            $configCsvDirectory = 'Export.EventType.configs.' . $exportCSVKey;
+
+            // Define the directory path for retrieving CSV export templates using the provided export key
+            $templateCsvDirectory = 'Export.EventType.templates.' . $exportCSVKey;
+
+            // Retrieve CSV configuration from the specified configuration directory
+            $csvConfiguration = ConfigUtil::getCSV($configCsvDirectory);
+
+            // Extract export parameters from the request based on the configuration
+            $exportParams = $csvConfiguration['params'] ?? [];
+            $params = $request->only($exportParams);
+
+            // Get the query for exporting CSV data
+            $csvQuery = $this->csvFileExportService->getExportCsvQuery($configCsvDirectory, $params);
+
+            // Perform the CSV export and get the file details
+            $exportResult = $this->csvFileExportService->exportCsv($csvQuery, $templateCsvDirectory);
+
+            // Extract the file name and file path from the export result
+            $fileName = $exportResult['fileName'];
+            $filePath = $exportResult['filePath'];
+
+            // Stream the CSV file for download
+            return Response::streamCsvDownload($filePath, $fileName);
         } catch (Exception $e) {
             Log::error($e);
 

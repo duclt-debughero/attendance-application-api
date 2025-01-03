@@ -90,6 +90,10 @@ class AppServiceProvider extends ServiceProvider
                 }
             }, $fileName, [
                 'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+                'Cache-Control' => 'no-cache',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ]);
         });
     }
