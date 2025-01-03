@@ -25,7 +25,7 @@ class ApiBusUtil
      *
      * @param ApiCodeNo|string|null $codeNo
      * @param ApiStatusCode|int $status
-     * @param string|null $message
+     * @param array|string|null $message
      * @return \Illuminate\Http\JsonResponse
      */
     public static function errorResponse($codeNo = null, $status = 400, $message = null) {

@@ -1,0 +1,13 @@
+import_csv_event_type:
+  event_type_id:
+    header: Event Type ID
+    validate:
+      - Required
+      - Numeric
+  type_name:
+    header: Event Type Name
+    validate:
+      - Required
+      - MaxLength: 150
+  description:
+    header: Description
