@@ -54,7 +54,7 @@ class EventTypeRepository extends BaseRepository
                 $query->where('event_type.type_name', 'like', "%{$params['type_name']}%");
             }
 
-            return $query->get();
+            return $query;
         } catch (Exception $e) {
             Log::error($e);
 

@@ -21,10 +21,9 @@ class CsvFileExportService
      * @param mixed $csvQuery
      * @param string $templateCsvDirectory
      * @param string $encoding
-     * @param mixed $additionalCsvData
      * @return array
      */
-    public function exportCsv($csvQuery, $templateCsvDirectory, $encoding = 'SJIS-WIN') {
+    public function exportCsv($csvQuery, $templateCsvDirectory, $encoding = 'UTF-8') {
         // Retrieve CSV configuration from the specified template directory
         $csvConfiguration = ConfigUtil::getCSV($templateCsvDirectory);
         $fieldConfigurations = $csvConfiguration['fieldConfig'];
@@ -34,8 +33,8 @@ class CsvFileExportService
 
         // Generate the file name with a timestamp and a unique identifier
         $fileName = $csvConfiguration['fileName'] . '_' . Carbon::now()->format('YmdHis') . '.csv';
-        $uniqueFileName = uniqid();
-        $filePath = storage_path('app/' . $uniqueFileName);
+        $uniqueFileName = uniqid() . '.csv';
+        $filePath = storage_path('app/private/' . $uniqueFileName);
 
         // Create a temporary file for writing CSV data
         $temporaryFile = tmpfile();
@@ -73,9 +72,15 @@ class CsvFileExportService
 
             // Save the temporary file to permanent storage
             Storage::put($uniqueFileName, $temporaryFile);
+
+            // Close the file after writing all data
+            fclose($temporaryFile);
         } catch (Exception $e) {
             // Log any errors that occur during the export process
             Log::error($e);
+
+            // Close the file if an error occurs
+            fclose($temporaryFile);
         }
 
         // Return the generated file name and file path
@@ -97,7 +102,7 @@ class CsvFileExportService
         $parsedParams = [];
 
         // If there are any specific parameters defined in the configuration, parse them
-        if (!empty($configurations['params'])) {
+        if (! empty($configurations['params'])) {
             foreach ($configurations['params'] as $paramKey) {
                 // Set the value of each parameter from inputParams or fallback to default values in configurations
                 $parsedParams[$paramKey] = $inputParams[$paramKey] ?? $configurations['default'][$paramKey] ?? null;

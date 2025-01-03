@@ -33,7 +33,7 @@ class UserRoleController extends ApiBaseController
             $params = $request->only(['user_role_name']);
 
             // Get user role list by params search
-            $userRoles = $this->userRoleRepository->search($params);
+            $userRoles = $this->userRoleRepository->search($params)->get();
             if ($userRoles->isEmpty()) {
                 return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
             }
