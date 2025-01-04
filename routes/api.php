@@ -35,7 +35,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware([ApiAuthToken::class])->group(function () {
         $roleMenuConfig = ValueUtil::getList('menu.role_menu');
 
-        // menu_id = 1, menu_name = User List
+        // menu_id = 1, menu_name = User Management
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['user']['menu_id']])->group(function () {
             Route::prefix('user')->name('user.')->group(function () {
                 Route::get('/list', [UserController::class, 'list'])->name('list');
@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        // menu_id = 2, menu_name = Role List
+        // menu_id = 2, menu_name = Role Management
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['role']['menu_id']])->group(function () {
             Route::prefix('role')->name('role.')->group(function () {
                 Route::get('/list', [UserRoleController::class, 'list'])->name('list');
@@ -63,9 +63,9 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        // menu_id = 3, menu_name = Event Type List
+        // menu_id = 3, menu_name = Event Type Management
         Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['event_type']['menu_id']])->group(function () {
-            Route::prefix('event-type')->name('event-type.')->group(function () {
+            Route::prefix('event/type')->name('event.type.')->group(function () {
                 Route::get('/list', [EventTypeController::class, 'list'])->name('list');
                 Route::get('/detail/{eventTypeId}', [EventTypeController::class, 'detail'])->name('detail');
                 Route::post('/export/csv', [EventTypeController::class, 'exportCsv'])->name('export.csv');
