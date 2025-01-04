@@ -35,7 +35,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type List
-     * GET /api/v1/event-type/list
+     * GET /api/v1/event/type/list
      *
      * @param Request $request
      */
@@ -63,7 +63,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Detail
-     * GET /api/v1/event-type/detail
+     * GET /api/v1/event/type/detail
      *
      * @param Request $request
      * @param string|int $eventTypeId
@@ -89,7 +89,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Create
-     * POST /api/v1/event-type/create
+     * POST /api/v1/event/type/create
      *
      * @param AddRequest $request
      */
@@ -117,7 +117,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Update
-     * POST /api/v1/event-type/update
+     * POST /api/v1/event/type/update
      *
      * @param EditRequest $request
      * @param string|int $eventTypeId
@@ -152,7 +152,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Delete
-     * POST /api/v1/event-type/delete
+     * POST /api/v1/event/type/delete
      *
      * @param Request $request
      * @param string|int $eventTypeId
@@ -181,7 +181,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Import CSV
-     * POST /api/v1/event-type/import/csv
+     * POST /api/v1/event/type/import/csv
      *
      * @param ImportCsvRequest $request
      */
@@ -206,7 +206,7 @@ class EventTypeController extends ApiBaseController
 
     /**
      * Event Type Export CSV
-     * POST /api/v1/event-type/export/csv
+     * POST /api/v1/event/type/export/csv
      *
      * @param Request $request
      */
