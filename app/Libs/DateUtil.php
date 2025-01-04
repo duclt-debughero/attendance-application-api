@@ -48,8 +48,8 @@ class DateUtil
         }
 
         $now = Carbon::now()->format('Y-m-d');
-        $dateOfSubmonth = Carbon::now()->subMonthsNoOverflow(intval($subMonth) - 1)->format('Y-m-d');
-        $dateRange = CarbonPeriod::create($dateOfSubmonth, $now);
+        $dateOfSubMonth = Carbon::now()->subMonthsNoOverflow(intval($subMonth) - 1)->format('Y-m-d');
+        $dateRange = CarbonPeriod::create($dateOfSubMonth, $now);
         $result = [];
         foreach ($dateRange as $key => $date) {
             $result[$date->format('Ym')] = $date->format($format);

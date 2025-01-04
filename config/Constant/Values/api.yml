@@ -2,6 +2,7 @@ route_name_to_api_name:
   auth.login: LOGIN
   auth.logout: LOGOUT
   auth.refresh: REFRESH ACCESS TOKEN
+  auth.token.expiration: TOKEN EXPIRATION
   password.forgot: FORGOT PASSWORD
   password.reset: RESET PASSWORD
   user.list: USER LIST
