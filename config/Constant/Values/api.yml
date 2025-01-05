@@ -22,3 +22,10 @@ route_name_to_api_name:
   event.type.delete: EVENT TYPE DELETE
   event.type.import.csv: EVENT TYPE IMPORT CSV
   event.type.export.csv: EVENT TYPE EXPORT CSV
+  event.list: EVENT LIST
+  event.detail: EVENT DETAIL
+  event.create: EVENT CREATE
+  event.update: EVENT UPDATE
+  event.delete: EVENT DELETE
+  event.import.csv: EVENT IMPORT CSV
+  event.export.csv: EVENT EXPORT CSV

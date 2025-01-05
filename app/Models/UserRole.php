@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class UserRole
  *
  * @property int $user_role_id
- * @property string $user_role_name
+ * @property string|null $user_role_name
  * @property int|null $del_flg
  * @property Carbon|null $created_at
  * @property int|null $created_by

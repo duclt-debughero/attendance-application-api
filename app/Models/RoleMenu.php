@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class RoleMenu
  *
  * @property int $menu_id
- * @property string $menu_name
+ * @property string|null $menu_name
  * @property int|null $del_flg
  * @property Carbon|null $created_at
  * @property int|null $created_by

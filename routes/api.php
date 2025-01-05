@@ -3,6 +3,7 @@
 use App\Enums\ApiCodeNo;
 use App\Http\Controllers\Api\{
     AuthController,
+    EventController,
     EventTypeController,
     PasswordController,
     UserController,
@@ -75,6 +76,22 @@ Route::prefix('v1')->group(function () {
                     Route::post('/update/{eventTypeId}', [EventTypeController::class, 'update'])->name('update');
                     Route::post('/delete/{eventTypeId}', [EventTypeController::class, 'delete'])->name('delete');
                     Route::post('/import/csv', [EventTypeController::class, 'importCsv'])->name('import.csv');
+                });
+            });
+        });
+
+        // menu_id = 4, menu_name = Event Management
+        Route::middleware([ApiAuthorizeAccess::class . ':' . $roleMenuConfig['event']['menu_id']])->group(function () {
+            Route::prefix('event')->name('event.')->group(function () {
+                Route::get('/list', [EventController::class, 'list'])->name('list');
+                Route::get('/detail/{eventId}', [EventController::class, 'detail'])->name('detail');
+                Route::post('/export/csv', [EventController::class, 'exportCsv'])->name('export.csv');
+
+                Route::middleware([ApiAuthorizeCheckPermission::class . ':REGISTER'])->group(function() {
+                    Route::post('/create', [EventController::class, 'create'])->name('create');
+                    Route::post('/update/{eventId}', [EventController::class, 'update'])->name('update');
+                    Route::post('/delete/{eventId}', [EventController::class, 'delete'])->name('delete');
+                    Route::post('/import/csv', [EventController::class, 'importCsv'])->name('import.csv');
                 });
             });
         });
