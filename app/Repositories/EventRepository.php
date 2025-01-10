@@ -33,7 +33,7 @@ class EventRepository extends BaseRepository
 
         $query = Event::query()
             ->select(array_merge($defaultColumns, $columns))
-            ->join('event_type', function ($join) {
+            ->leftJoin('event_type', function ($join) {
                 $join
                     ->on('event.event_type_id', '=', 'event_type.event_type_id')
                     ->whereValidDelFlg();
@@ -88,6 +88,24 @@ class EventRepository extends BaseRepository
             }
 
             return $query;
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
+    }
+
+    /**
+     * Get event by event id
+     *
+     * @param string|int $eventId
+     * @return mixed
+     */
+    public function getEventByEventId($eventId) {
+        try {
+            $query = $this->getQueryEvent()->where('event.event_id', $eventId);
+
+            return $query->first();
         } catch (Exception $e) {
             Log::error($e);
 
