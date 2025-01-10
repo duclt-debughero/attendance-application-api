@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $body
  * @property Carbon|null $start_time
  * @property Carbon|null $end_time
- * @property int $disable_flg
  * @property int|null $del_flg
  * @property Carbon|null $created_at
  * @property int|null $created_by
@@ -41,7 +40,6 @@ class Maintenance extends Model
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',
-        'disable_flg' => 'int',
         'del_flg' => 'int',
         'created_by' => 'int',
         'updated_by' => 'int',
@@ -52,7 +50,6 @@ class Maintenance extends Model
         'body',
         'start_time',
         'end_time',
-        'disable_flg',
         'del_flg',
         'created_by',
         'updated_by',

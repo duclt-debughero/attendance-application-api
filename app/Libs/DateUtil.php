@@ -197,9 +197,9 @@ class DateUtil
     public static function getTimestamp() {
         $microtime = floatval(substr((string) microtime(), 1, 8));
         $rounded = round($microtime, 3);
-        $milisecond = substr((string) $rounded, 2, strlen($rounded));
+        $milSecond = substr((string) $rounded, 2, strlen($rounded));
 
-        return Carbon::now()->format('YmdHis') . $milisecond;
+        return Carbon::now()->format('YmdHis') . $milSecond;
     }
 
     /**
