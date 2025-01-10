@@ -69,7 +69,16 @@ class EventController extends ApiBaseController
      */
     public function detail(Request $request, $eventId) {
         try {
-            return ApiBusUtil::successResponse();
+            // Get event by event id
+            $event = $this->eventRepository->getEventByEventId($eventId);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
+            }
+
+            // Convert data for event detail
+            $event = $this->eventService->convertDataEventDetail($event);
+
+            return ApiBusUtil::successResponse($event);
         } catch (Exception $e) {
             Log::error($e);
 
