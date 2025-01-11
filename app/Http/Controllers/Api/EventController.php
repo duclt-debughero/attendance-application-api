@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\EventRepository;
+use App\Requests\Api\Event\AddRequest;
 use App\Services\EventService;
 use Carbon\Carbon;
 use Exception;
@@ -90,11 +91,30 @@ class EventController extends ApiBaseController
      * Event Create
      * POST /api/v1/event/create
      *
-     * @param Request $request
+     * @param AddRequest $request
      */
-    public function create(Request $request) {
+    public function create(AddRequest $request) {
         try {
-            return ApiBusUtil::successResponse();
+            $params = $request->only([
+                'event_name',
+                'event_start_time',
+                'event_end_time',
+                'location',
+                'description',
+                'event_type_id',
+            ]);
+
+            // Create event
+            $event = $this->eventRepository->create($params);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for event detail
+            $event = $this->eventRepository->getEventByEventId($event->event_id);
+            $event = $this->eventService->convertDataEventDetail($event);
+
+            return ApiBusUtil::successResponse($event);
         } catch (Exception $e) {
             Log::error($e);
 
