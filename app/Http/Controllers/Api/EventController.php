@@ -176,6 +176,18 @@ class EventController extends ApiBaseController
      */
     public function delete(Request $request, $eventId) {
         try {
+            // Get event by event id
+            $event = $this->eventRepository->getEventByEventId($eventId);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Delete event
+            $event = $this->eventRepository->deleteById($eventId);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
             return ApiBusUtil::successResponse();
         } catch (Exception $e) {
             Log::error($e);
