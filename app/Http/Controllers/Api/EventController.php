@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\ApiBusUtil;
 use App\Repositories\EventRepository;
-use App\Requests\Api\Event\AddRequest;
+use App\Requests\Api\Event\{
+    AddRequest,
+    EditRequest,
+};
 use App\Services\EventService;
 use Carbon\Carbon;
 use Exception;
@@ -126,12 +129,37 @@ class EventController extends ApiBaseController
      * Event Update
      * POST /api/v1/event/update
      *
-     * @param Request $request
+     * @param EditRequest $request
      * @param string|int $eventId
      */
-    public function update(Request $request, $eventId) {
+    public function update(EditRequest $request, $eventId) {
         try {
-            return ApiBusUtil::successResponse();
+            $params = $request->only([
+                'event_name',
+                'event_start_time',
+                'event_end_time',
+                'location',
+                'description',
+                'event_type_id',
+            ]);
+
+            // Get event by event id
+            $event = $this->eventRepository->getEventByEventId($eventId);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Update event
+            $event = $this->eventRepository->update($eventId, $params);
+            if (empty($event)) {
+                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
+            }
+
+            // Convert data for event detail
+            $event = $this->eventRepository->getEventByEventId($event->event_id);
+            $event = $this->eventService->convertDataEventDetail($event);
+
+            return ApiBusUtil::successResponse($event);
         } catch (Exception $e) {
             Log::error($e);
 
