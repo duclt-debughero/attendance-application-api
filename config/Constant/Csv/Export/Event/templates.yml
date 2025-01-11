@@ -1,0 +1,19 @@
+export_csv_event:
+  fileName: Event
+  fieldConfig:
+    event_id:
+      title: Event ID
+    event_name:
+      title: Event Name
+    event_start_time:
+      title: Event Start Time
+      format_date_time: Y/m/d H:i
+    event_end_time:
+      title: Event End Time
+      format_date_time: Y/m/d H:i
+    location:
+      title: Location
+    description:
+      title: Description
+    event_type_id:
+      title: Event Type ID
