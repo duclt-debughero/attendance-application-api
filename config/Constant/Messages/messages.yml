@@ -27,7 +27,7 @@ ECL026: For <0>, please select a date and time after <1>.
 ECL027: For <0>, select a date after today.
 ECL029: Email address cannot be used as password.
 ECL030: New password does not match confirmation password.
-ECL031: Email address does not exist. Please check your Email address, date of birth, and authentication key again.
+ECL031: Email address does not exist. Please check your email address, date of birth, and authentication key again.
 ECL032: This is an already registered email address.
 ICL033: There is no customer information that matches the input content. Please check your input.
 ECL034: Please enter your changes.
@@ -55,7 +55,7 @@ API_REQUIRED_PARAMETER: Required request parameters are missing. Please check th
 API_RECORD_NOT_EXISTS: No matching data was found.
 API_ACCESS_TOKEN_EXPIRED: The access token has expired.
 API_ISSUE_ACCESS_TOKEN_FAILED: Authentication error. Please login again.
-API_LOGIN_FAILED: "Login failed.\nThe Email address or password you entered may be incorrect.\nPlease check and try again."
+API_LOGIN_FAILED: "Login failed.\nThe email address or password you entered may be incorrect.\nPlease check and try again."
 API_NOT_LOGIN: You have logged in on another device. Please login again.
 API_URL_NOT_EXISTS: No matching URL was found.
 API_DISABLED_USER_ERROR: Your account is currently disabled.
