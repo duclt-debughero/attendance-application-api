@@ -141,9 +141,9 @@ class CsvFileExportService
                 $formattedItem = null;
 
                 if (array_key_exists($key, $recordArray)) {
-                    if (isset($configItem['format_date'])) {
+                    if (isset($configItem['format_date_time'])) {
                         $originalDate = $record->{$key} ?? null;
-                        $formattedItem = DateUtil::formatDateTime($originalDate, $configItem['format_date']);
+                        $formattedItem = DateUtil::formatDateTime($originalDate, $configItem['format_date_time']);
                     } else if (isset($configItem['format_type'])) {
                         $formattedItem = getValueToText($recordArray[$key], $configItem['format_type']);
                     } else if (isset($configItem['decrypt_aes_256'])) {

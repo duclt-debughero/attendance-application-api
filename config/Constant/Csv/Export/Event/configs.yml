@@ -1,0 +1,11 @@
+export_csv_event:
+  repository: EventRepository
+  action: search
+  params:
+    - event_id
+    - event_name
+    - event_start_time_from
+    - event_start_time_to
+    - event_end_time_from
+    - event_end_time_to
+    - event_type_name
