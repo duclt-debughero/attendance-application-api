@@ -7,6 +7,7 @@ use App\Repositories\EventTypeRepository;
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\{
     MaxLength,
+    Numeric,
     ValidEventType,
 };
 use App\Rules\FormatDate;
@@ -46,7 +47,10 @@ class AddRequest extends BaseApiRequest
         ];
 
         if ($request->has('event_type_id') && $request->event_type_id) {
-            $rules['event_type_id'][] = new ValidEventType($this->eventTypeRepository, $request->event_type_id);
+            $rules['event_type_id'] = [
+                new Numeric(),
+                new ValidEventType($this->eventTypeRepository, $request->event_type_id),
+            ];
         }
 
         return $rules;

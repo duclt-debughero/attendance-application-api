@@ -3,6 +3,7 @@
 namespace App\Requests\Api\Auth;
 
 use App\Requests\Api\BaseApiRequest;
+use App\Rules\Numeric;
 
 class LogoutRequest extends BaseApiRequest
 {
@@ -13,7 +14,10 @@ class LogoutRequest extends BaseApiRequest
      */
     public function rules() {
         return [
-            'device_id' => 'required',
+            'device_id' => [
+                'required',
+                new Numeric(),
+            ],
         ];
     }
 

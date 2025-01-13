@@ -16,7 +16,7 @@ class Numeric implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! preg_match('/^[0-9]*$/', $value)) {
+        if (isset($value) && ! preg_match('/^[0-9]*$/', $value)) {
             $fail(ConfigUtil::getMessage('ECL004', [':attribute']));
         }
     }

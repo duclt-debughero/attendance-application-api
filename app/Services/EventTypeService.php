@@ -9,6 +9,7 @@ use App\Libs\{
     ValueUtil,
 };
 use App\Repositories\EventTypeRepository;
+use Exception;
 use Illuminate\Support\Facades\{Auth, DB, Log};
 
 class EventTypeService
@@ -127,7 +128,7 @@ class EventTypeService
 
             // Check create or update successfully
             $checkCreateOrUpdateSuccessfully = empty($errorArray) && $checkCreateOrUpdateSuccessfully;
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             DB::rollBack();
             Log::error($e);
 

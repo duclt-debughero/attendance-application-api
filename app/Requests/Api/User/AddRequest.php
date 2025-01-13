@@ -12,6 +12,7 @@ use App\Rules\{
     MailRfc,
     MaxLength,
     MinLength,
+    Numeric,
     UniqueUser,
     ValidPassword,
     ValidUserRole,
@@ -63,7 +64,10 @@ class AddRequest extends BaseApiRequest
         }
 
         if ($request->has('user_role_id') && $request->user_role_id) {
-            $rules['user_role_id'][] = new ValidUserRole($this->userRoleRepository, $request->user_role_id);
+            $rules['user_role_id'] = [
+                new Numeric(),
+                new ValidUserRole($this->userRoleRepository, $request->user_role_id),
+            ];
         }
 
         return $rules;
