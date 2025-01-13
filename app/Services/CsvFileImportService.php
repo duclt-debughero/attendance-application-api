@@ -118,7 +118,7 @@ class CsvFileImportService
      * @param array $attributes
      * @return mixed
      */
-    function applyValidationRuleForCsv($validationRules, &$dataFields, $attributes) {
+    public function applyValidationRuleForCsv($validationRules, &$dataFields, $attributes) {
         try {
             $errorMessages = null;
             $compiledRules = [];
@@ -130,38 +130,72 @@ class CsvFileImportService
                         case 'RequiredIf':
                             $dependentValue = reset($params)[1] ?? null;
                             $expectedValue = $dataFields[reset($params)[0]] ?? null;
+
+                            // Check if parameters are correctly set
                             if (isset($dependentValue) && isset($expectedValue)) {
                                 $params = [$dependentValue, $expectedValue];
                                 break;
                             }
+
                             // If parameters are not correctly set, skip this rule
                             continue 2;
                         case 'NullIf':
                             $dependentValue = reset($params)[1] ?? null;
                             $expectedValue = $dataFields[reset($params)[0]] ?? null;
+
+                            // Check if parameters are correctly set
                             if (isset($dependentValue) && isset($expectedValue) && $dependentValue == $expectedValue) {
                                 $dataFields[$field] = null;
                             }
-                            // NullIf doesn't need to instantiate a rule class
+
+                            // If parameters are not correctly set, skip this rule
                             continue 2;
                         case 'MinLengthIf':
                             $dependentValue = reset($params)[1] ?? null;
                             $expectedValue = $dataFields[reset($params)[0]] ?? null;
                             $minValue = reset($params)[2] ?? null;
-                            if (isset($dependentValue) && isset($expectedValue)) {
+
+                            // Check if parameters are correctly set
+                            if (isset($dependentValue) && isset($expectedValue) && isset($minValue)) {
                                 $params = [$dependentValue, $expectedValue, $minValue];
                                 break;
                             }
+
                             // If parameters are not correctly set, skip this rule
                             continue 2;
                         case 'MaxLengthIf':
                             $dependentValue = reset($params)[1] ?? null;
                             $expectedValue = $dataFields[reset($params)[0]] ?? null;
                             $maxValue = reset($params)[2] ?? null;
-                            if (isset($dependentValue) && isset($expectedValue)) {
+
+                            // Check if parameters are correctly set
+                            if (isset($dependentValue) && isset($expectedValue) && isset($maxValue)) {
                                 $params = [$dependentValue, $expectedValue, $maxValue];
                                 break;
                             }
+
+                            // If parameters are not correctly set, skip this rule
+                            continue 2;
+                        case 'DateTimeComparison':
+                            $startDateTimeLabel = reset($params)[0] ?? null;
+                            $endDateTimeLabel = reset($params)[1] ?? null;
+                            $startDateTimeValue = $dataFields[reset($params)[2]] ?? null;
+                            $endDateTimeValue = $dataFields[reset($params)[3]] ?? null;
+                            $format = reset($params)[4] ?? null;
+                            $operator = reset($params)[5] ?? null;
+
+                            // Check if parameters are correctly set
+                            if (isset($startDateTimeLabel) &&
+                                isset($endDateTimeLabel) &&
+                                isset($startDateTimeValue) &&
+                                isset($endDateTimeValue) &&
+                                isset($format) &&
+                                isset($operator)
+                            ) {
+                                $params = [$startDateTimeLabel, $endDateTimeLabel, $startDateTimeValue, $endDateTimeValue, $format, $operator];
+                                break;
+                            }
+
                             // If parameters are not correctly set, skip this rule
                             continue 2;
                     }
@@ -197,7 +231,7 @@ class CsvFileImportService
      * @param array $options
      * @return array
      */
-    function commonErrorForCsv($validationErrors, $options = []) {
+    public function commonErrorForCsv($validationErrors, $options = []) {
         if (!empty($validationErrors)) {
             // Initialize errors with the default message if $errors is empty
             if (empty($this->errors)) {
