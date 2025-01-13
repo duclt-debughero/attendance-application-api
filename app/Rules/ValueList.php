@@ -16,7 +16,9 @@ class ValueList implements ValidationRule
      *
      * @param string $key
      */
-    public function __construct(private string $key) {
+    public function __construct(
+        private $key,
+    ) {
     }
 
     /**

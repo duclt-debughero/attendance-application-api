@@ -16,7 +16,7 @@ class ValidPassword implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! (preg_match('/^[a-zA-Z0-9\#\$\%\(\)\*\+\-\.\:\;\?\@\[\]\_\{\}\~\/]*$/', $value))) {
+        if (isset($value) && ! (preg_match('/^[a-zA-Z0-9\#\$\%\(\)\*\+\-\.\:\;\?\@\[\]\_\{\}\~\/]*$/', $value))) {
             $fail(ConfigUtil::getMessage('ECL025', [':attribute']));
         }
     }

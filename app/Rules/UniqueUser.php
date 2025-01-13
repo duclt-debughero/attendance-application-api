@@ -16,8 +16,8 @@ class UniqueUser implements ValidationRule
      * @param string|null $emailAddress
      */
     public function __construct(
-        private readonly MstUserRepository $mstUserRepository,
-        private string|null $emailAddress = null,
+        private MstUserRepository $mstUserRepository,
+        private $emailAddress = null,
     ) {
     }
 

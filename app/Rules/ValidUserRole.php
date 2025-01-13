@@ -16,8 +16,8 @@ class ValidUserRole implements ValidationRule
      * @param string|int|null $userRoleId
      */
     public function __construct(
-        private readonly UserRoleRepository $userRoleRepository,
-        private string|int|null $userRoleId = null,
+        private UserRoleRepository $userRoleRepository,
+        private $userRoleId = null,
     ) {
     }
 

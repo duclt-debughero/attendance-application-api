@@ -7,8 +7,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class MinLengthIf implements ValidationRule
 {
-    private string $dependentValue;
-    private string $expectedValue;
     private MinLength $minLengthRule;
 
     /**
@@ -18,11 +16,11 @@ class MinLengthIf implements ValidationRule
      * @param string $expectedValue
      * @param int $min
      */
-    public function __construct(string $dependentValue, string $expectedValue, int $min)
-    {
-        $this->dependentValue = $dependentValue;
-        $this->expectedValue = $expectedValue;
-        $this->minLengthRule = new MinLength($min);
+    public function __construct(
+        private $dependentValue,
+        private $expectedValue,
+        private $min,
+    ) {
     }
 
     /**
@@ -32,8 +30,10 @@ class MinLengthIf implements ValidationRule
      * @param mixed $value
      * @param Closure $fail
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
-    {
+    public function validate(string $attribute, mixed $value, Closure $fail): void {
+        $this->minLengthRule = new MinLength($this->min);
+
+        // Check if the dependent value is equal to the expected value
         if ($this->dependentValue == $this->expectedValue) {
             $this->minLengthRule->validate($attribute, $value, $fail);
         }

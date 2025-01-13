@@ -14,7 +14,7 @@ class MinLength implements ValidationRule
      * @param int $min
      */
     public function __construct(
-        private int $min,
+        private $min,
     ) {
     }
 
@@ -26,11 +26,13 @@ class MinLength implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $value = str_replace("\r\n", "\n", $value);
-        $currentLength = mb_strlen($value);
+        if (isset($value)) {
+            $value = str_replace("\r\n", "\n", $value);
+            $currentLength = mb_strlen($value);
 
-        if (! ($currentLength >= $this->min)) {
-            $fail(ConfigUtil::getMessage('ECL003', [':attribute', $this->min, $currentLength]));
+            if (! ($currentLength >= $this->min)) {
+                $fail(ConfigUtil::getMessage('ECL003', [':attribute', $this->min, $currentLength]));
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ class MaxLengthDigitInteger implements ValidationRule
      * @param int $max
      */
     public function __construct(
-        private int $max,
+        private $max,
     ) {
     }
 
@@ -26,11 +26,16 @@ class MaxLengthDigitInteger implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $parts = explode(".", $value);
-        $currentLength = strlen($parts[0]);
+        if (isset($value)) {
+            $parts = explode('.', $value);
 
-        if (! ($currentLength <= $this->max)) {
-            $fail(ConfigUtil::getMessage('ECL002', [':attribute'.'integer value', $this->max, $currentLength]));
+            // Check if there is an integer part
+            if (count($parts) > 1) {
+                $currentLength = strlen($parts[0]);
+                if (! ($currentLength <= $this->max)) {
+                    $fail(ConfigUtil::getMessage('ECL002', [':attribute'.'integer value', $this->max, $currentLength]));
+                }
+            }
         }
     }
 }

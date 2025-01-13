@@ -14,7 +14,7 @@ class MaxLength implements ValidationRule
      * @param int $max
      */
     public function __construct(
-        private int $max,
+        private $max,
     ) {
     }
 
@@ -26,11 +26,13 @@ class MaxLength implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $value = str_replace("\r\n", "\n", $value);
-        $currentLength = mb_strlen($value);
+        if (isset($value)) {
+            $value = str_replace("\r\n", "\n", $value);
+            $currentLength = mb_strlen($value);
 
-        if (! ($currentLength <= $this->max)) {
-            $fail(ConfigUtil::getMessage('ECL002', [':attribute', $this->max, $currentLength]));
+            if (! ($currentLength <= $this->max)) {
+                $fail(ConfigUtil::getMessage('ECL002', [':attribute', $this->max, $currentLength]));
+            }
         }
     }
 }

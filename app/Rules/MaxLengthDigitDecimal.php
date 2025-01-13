@@ -14,7 +14,7 @@ class MaxLengthDigitDecimal implements ValidationRule
      * @param int $max
      */
     public function __construct(
-        private int $max,
+        private $max,
     ) {
     }
 
@@ -26,13 +26,15 @@ class MaxLengthDigitDecimal implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $parts = explode(".", $value);
+        if (isset($value)) {
+            $parts = explode('.', $value);
 
-        // Check if there is a decimal part
-        if (count($parts) > 1) {
-            $currentLength = strlen($parts[1]);
-            if (! ($currentLength <= $this->max)) {
-                $fail(ConfigUtil::getMessage('ECL002', [':attribute'.'decimal value', $this->max, $currentLength]));
+            // Check if there is a decimal part
+            if (count($parts) > 1) {
+                $currentLength = strlen($parts[1]);
+                if (! ($currentLength <= $this->max)) {
+                    $fail(ConfigUtil::getMessage('ECL002', [':attribute'.'decimal value', $this->max, $currentLength]));
+                }
             }
         }
     }

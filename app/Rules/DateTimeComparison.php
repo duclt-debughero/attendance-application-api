@@ -12,6 +12,14 @@ class DateTimeComparison implements ValidationRule
     /**
      * Create a new rule instance.
      *
+     * The operator can be one of the following:
+     * - 'gt': Greater Than (startDateTime > endDateTime)
+     * - 'lt': Less Than (startDateTime < endDateTime)
+     * - 'gte': Greater Than or Equal (startDateTime >= endDateTime)
+     * - 'lte': Less Than or Equal (startDateTime <= endDateTime)
+     * - 'eq': Equal (startDateTime == endDateTime)
+     * - 'neq': Not Equal (startDateTime != endDateTime)
+     *
      * @param string $startDateTimeLabel
      * @param string $endDateTimeLabel
      * @param string|null $startDateTimeValue
@@ -20,12 +28,12 @@ class DateTimeComparison implements ValidationRule
      * @param string $operator
      */
     public function __construct(
-        private string $startDateTimeLabel,
-        private string $endDateTimeLabel,
-        private string|null $startDateTimeValue = null,
-        private string|null $endDateTimeValue = null,
-        private string $format,
-        private string $operator,
+        private $startDateTimeLabel,
+        private $endDateTimeLabel,
+        private $startDateTimeValue = null,
+        private $endDateTimeValue = null,
+        private $format,
+        private $operator,
     ) {
     }
 
@@ -61,21 +69,17 @@ class DateTimeComparison implements ValidationRule
      * @return bool
      */
     private function compare(Carbon $startDateTime, Carbon $endDateTime): bool {
-        switch ($this->operator) {
-            case '>':
-                return $startDateTime->gt($endDateTime);
-            case '<':
-                return $startDateTime->lt($endDateTime);
-            case '>=':
-                return $startDateTime->gte($endDateTime);
-            case '<=':
-                return $startDateTime->lte($endDateTime);
-            case '=':
-                return $startDateTime->eq($endDateTime);
-            case '!=':
-                return !$startDateTime->eq($endDateTime);
-            default:
-                return false;
+        // Check if the operator is one of the valid Carbon comparison methods
+        if (in_array($this->operator, ['gt', 'lt', 'gte', 'lte', 'eq'], true)) {
+            return $startDateTime->{$this->operator}($endDateTime);
         }
+
+        // Check if the operator is 'neq'
+        if ($this->operator === 'neq') {
+            return ! $startDateTime->eq($endDateTime);
+        }
+
+        // Return false if the operator is invalid or unsupported
+        return false;
     }
 }

@@ -16,7 +16,7 @@ class MailRfc implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (
+        if (isset($value) &&
             ! (
                 preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $value)
                 && preg_match('/^[a-zA-Z0-9~`!@#$%^&*()-_=+<>?,.\/:;"\'{}]*$/', $value)

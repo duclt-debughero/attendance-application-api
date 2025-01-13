@@ -7,8 +7,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class MaxLengthIf implements ValidationRule
 {
-    private string $dependentValue;
-    private string $expectedValue;
     private MaxLength $maxLengthRule;
 
     /**
@@ -18,11 +16,11 @@ class MaxLengthIf implements ValidationRule
      * @param string $expectedValue
      * @param int $max
      */
-    public function __construct(string $dependentValue, string $expectedValue, int $max)
-    {
-        $this->dependentValue = $dependentValue;
-        $this->expectedValue = $expectedValue;
-        $this->maxLengthRule = new MaxLength($max);
+    public function __construct(
+        private $dependentValue,
+        private $expectedValue,
+        private $max,
+    ) {
     }
 
     /**
@@ -32,8 +30,10 @@ class MaxLengthIf implements ValidationRule
      * @param mixed $value
      * @param Closure $fail
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
-    {
+    public function validate(string $attribute, mixed $value, Closure $fail): void {
+        $this->maxLengthRule = new MaxLength($this->max);
+
+        // Check if the dependent value is equal to the expected value
         if ($this->dependentValue == $this->expectedValue) {
             $this->maxLengthRule->validate($attribute, $value, $fail);
         }

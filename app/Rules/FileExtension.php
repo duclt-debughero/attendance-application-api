@@ -15,8 +15,8 @@ class FileExtension implements ValidationRule
      * @param array $extensions
      */
     public function __construct(
-        private string $label,
-        private array $extensions,
+        private $label,
+        private $extensions,
     ) {
     }
 

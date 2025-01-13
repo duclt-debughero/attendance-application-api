@@ -13,7 +13,9 @@ class Alphanumeric implements ValidationRule
      *
      * @param string|null $chars
      */
-    public function __construct(private string $chars = "") {
+    public function __construct(
+        private $chars = null,
+    ) {
     }
 
     /**
@@ -24,15 +26,8 @@ class Alphanumeric implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        $pattern = '/^[a-zA-Z0-9]*$/';
-
-        if (! empty($this->chars)) {
-            // Escape any special regex characters in chars
-            $escapedChars = preg_quote($this->chars, '/');
-
-            // Combine alphanumeric with allowed special characters
-            $pattern = '/^[a-zA-Z0-9' . $escapedChars . ']*$/';
-        }
+        $escapedChars = isset($this->chars) ? preg_quote($this->chars, '/') : '';
+        $pattern = '/^[a-zA-Z0-9' . $escapedChars . ']*$/';
 
         if (! preg_match($pattern, $value)) {
             $fail(ConfigUtil::getMessage('ECL006', [':attribute']));

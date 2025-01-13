@@ -17,7 +17,7 @@ class FormatDate implements ValidationRule
      * @param string $format
      */
     public function __construct(
-        private string $format,
+        private $format,
     ) {
     }
 
@@ -29,7 +29,7 @@ class FormatDate implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! empty($value) && ! $this->isValidDate($value)) {
+        if (isset($value) && ! $this->isValidDate($value)) {
             $fail(ConfigUtil::getMessage('ECL010', [':attribute']));
         }
     }

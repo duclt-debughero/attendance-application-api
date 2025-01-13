@@ -16,8 +16,8 @@ class ValidEventType implements ValidationRule
      * @param string|int|null $eventTypeId
      */
     public function __construct(
-        private readonly EventTypeRepository $eventTypeRepository,
-        private string|int|null $eventTypeId = null,
+        private EventTypeRepository $eventTypeRepository,
+        private $eventTypeId = null,
     ) {
     }
 

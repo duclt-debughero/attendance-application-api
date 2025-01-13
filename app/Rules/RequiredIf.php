@@ -14,8 +14,8 @@ class RequiredIf implements ValidationRule
      * @param string $expectedValue
      */
     public function __construct(
-        private string $dependentValue,
-        private string $expectedValue,
+        private $dependentValue,
+        private $expectedValue,
     ) {
     }
 

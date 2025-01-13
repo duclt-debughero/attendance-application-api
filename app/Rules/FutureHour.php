@@ -20,7 +20,7 @@ class FutureHour implements ValidationRule
      * @param string $label
      */
     public function __construct(
-        private string $label,
+        private $label,
     ) {
     }
 
