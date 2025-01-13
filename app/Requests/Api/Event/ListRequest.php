@@ -24,7 +24,14 @@ class ListRequest extends BaseApiRequest
             'event_start_time_to' => [
                 'nullable',
                 new FormatDate('Y/m/d'),
-                new DateTimeComparison('event_start_time_from', 'event_start_time_to', $request->event_start_time_from, $request->event_start_time_to, 'Y/m/d', '<='),
+                new DateTimeComparison(
+                    'event_start_time_from',
+                    'event_start_time_to',
+                    $request->event_start_time_from,
+                    $request->event_start_time_to,
+                    'Y/m/d',
+                    'lte',
+                ),
             ],
             'event_end_time_from' => [
                 'nullable',
@@ -33,7 +40,14 @@ class ListRequest extends BaseApiRequest
             'event_end_time_to' => [
                 'nullable',
                 new FormatDate('Y/m/d'),
-                new DateTimeComparison('event_end_time_from', 'event_end_time_to', $request->event_end_time_from, $request->event_end_time_to, 'Y/m/d', '<='),
+                new DateTimeComparison(
+                    'event_end_time_from',
+                    'event_end_time_to',
+                    $request->event_end_time_from,
+                    $request->event_end_time_to,
+                    'Y/m/d',
+                    'lte',
+                ),
             ],
         ];
     }

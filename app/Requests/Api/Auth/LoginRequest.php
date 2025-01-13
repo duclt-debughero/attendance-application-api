@@ -3,11 +3,7 @@
 namespace App\Requests\Api\Auth;
 
 use App\Requests\Api\BaseApiRequest;
-use App\Rules\{
-    MailRfc,
-    MaxLength,
-    MinLength,
-};
+use App\Rules\MailRfc;
 
 class LoginRequest extends BaseApiRequest
 {
@@ -21,13 +17,8 @@ class LoginRequest extends BaseApiRequest
             'email_address' => [
                 'required',
                 new MailRfc(),
-                new MaxLength(255),
             ],
-            'password' => [
-                'required',
-                new MinLength(8),
-                new MaxLength(16),
-            ],
+            'password' => 'required',
         ];
     }
 

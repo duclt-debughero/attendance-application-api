@@ -39,7 +39,13 @@ class EditRequest extends BaseApiRequest
             'event_end_time' => [
                 'required',
                 new FormatDate('Y/m/d H:i'),
-                new DateTimeComparison('event_start_time', 'event_end_time', $request->event_start_time, $request->event_end_time, 'Y/m/d H:i', '<'),
+                new DateTimeComparison('event_start_time',
+                    'event_end_time',
+                    $request->event_start_time,
+                    $request->event_end_time,
+                    'Y/m/d H:i',
+                    'lt',
+                ),
             ],
             'location' => [
                 'nullable',
