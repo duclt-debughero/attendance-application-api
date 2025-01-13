@@ -2,7 +2,6 @@
 
 namespace App\Requests\Api\Event;
 
-use App\Libs\ConfigUtil;
 use App\Repositories\EventTypeRepository;
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\{

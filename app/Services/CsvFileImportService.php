@@ -185,13 +185,7 @@ class CsvFileImportService
                             $operator = reset($params)[5] ?? null;
 
                             // Check if parameters are correctly set
-                            if (isset($startDateTimeLabel) &&
-                                isset($endDateTimeLabel) &&
-                                isset($startDateTimeValue) &&
-                                isset($endDateTimeValue) &&
-                                isset($format) &&
-                                isset($operator)
-                            ) {
+                            if (isset($startDateTimeLabel) && isset($endDateTimeLabel) && isset($format) && isset($operator)) {
                                 $params = [$startDateTimeLabel, $endDateTimeLabel, $startDateTimeValue, $endDateTimeValue, $format, $operator];
                                 break;
                             }
