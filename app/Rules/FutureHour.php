@@ -18,7 +18,6 @@ class FutureHour implements ValidationRule
      * Create a new rule instance.
      *
      * @param string $label
-     * @return void
      */
     public function __construct(
         private string $label,

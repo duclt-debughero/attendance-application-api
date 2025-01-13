@@ -17,7 +17,6 @@ class MinLengthIf implements ValidationRule
      * @param string $dependentValue
      * @param string $expectedValue
      * @param int $min
-     * @return void
      */
     public function __construct(string $dependentValue, string $expectedValue, int $min)
     {

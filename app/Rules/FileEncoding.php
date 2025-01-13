@@ -13,7 +13,6 @@ class FileEncoding implements ValidationRule
      *
      * @param string $label
      * @param string $encoding
-     * @return void
      */
     public function __construct(
         private string $label,

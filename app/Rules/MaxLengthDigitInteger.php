@@ -12,7 +12,6 @@ class MaxLengthDigitInteger implements ValidationRule
      * Create a new rule instance.
      *
      * @param int $max
-     * @return void
      */
     public function __construct(
         private int $max,

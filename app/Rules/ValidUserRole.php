@@ -9,12 +9,16 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class ValidUserRole implements ValidationRule
 {
-    private UserRoleRepository $userRoleRepository;
-    private string|int $userRoleId;
-
-    public function __construct(UserRoleRepository $userRoleRepository, $userRoleId) {
-        $this->userRoleRepository = $userRoleRepository;
-        $this->userRoleId = $userRoleId;
+    /**
+     * Create a new rule instance.
+     *
+     * @param UserRoleRepository $userRoleRepository
+     * @param string|int|null $userRoleId
+     */
+    public function __construct(
+        private readonly UserRoleRepository $userRoleRepository,
+        private string|int|null $userRoleId = null,
+    ) {
     }
 
     /**
@@ -25,7 +29,7 @@ class ValidUserRole implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! $this->userRoleRepository->findById($this->userRoleId)) {
+        if (isset($this->userRoleId) && ! $this->userRoleRepository->findById($this->userRoleId)) {
             $fail(ConfigUtil::getMessage('ECL050', [':attribute']));
         }
     }

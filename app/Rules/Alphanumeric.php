@@ -8,16 +8,12 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class Alphanumeric implements ValidationRule
 {
-    private string $chars;
-
     /**
      * Create a new rule instance.
      *
      * @param string|null $chars
-     * @return void
      */
-    public function __construct(string $chars = "") {
-        $this->chars = $chars;
+    public function __construct(private string $chars = "") {
     }
 
     /**

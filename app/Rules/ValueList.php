@@ -11,16 +11,12 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class ValueList implements ValidationRule
 {
-    private string $key;
-
     /**
      * Create a new rule instance.
      *
      * @param string $key
-     * @return void
      */
-    public function __construct(string $key) {
-        $this->key = $key;
+    public function __construct(private string $key) {
     }
 
     /**

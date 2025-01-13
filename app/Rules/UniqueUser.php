@@ -9,12 +9,16 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class UniqueUser implements ValidationRule
 {
-    private MstUserRepository $mstUserRepository;
-    private ?string $emailAddress;
-
-    public function __construct(MstUserRepository $mstUserRepository, ?string $emailAddress = null) {
-        $this->mstUserRepository = $mstUserRepository;
-        $this->emailAddress = $emailAddress;
+    /**
+     * Create a new rule instance.
+     *
+     * @param MstUserRepository $mstUserRepository
+     * @param string|null $emailAddress
+     */
+    public function __construct(
+        private readonly MstUserRepository $mstUserRepository,
+        private string|null $emailAddress = null,
+    ) {
     }
 
     /**
@@ -25,7 +29,7 @@ class UniqueUser implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! empty($this->emailAddress) && ! $this->mstUserRepository->isUniqueEmailAddress($this->emailAddress)) {
+        if (isset($this->emailAddress) && ! $this->mstUserRepository->isUniqueEmailAddress($this->emailAddress)) {
             $fail(ConfigUtil::getMessage('ICL043'));
         }
     }

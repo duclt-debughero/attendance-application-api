@@ -17,7 +17,6 @@ class MaxLengthIf implements ValidationRule
      * @param string $dependentValue
      * @param string $expectedValue
      * @param int $max
-     * @return void
      */
     public function __construct(string $dependentValue, string $expectedValue, int $max)
     {

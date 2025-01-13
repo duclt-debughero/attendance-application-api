@@ -49,15 +49,10 @@ class EditRequest extends BaseApiRequest
             ],
             'user_role_id' => [
                 'required',
-            ],
-        ];
-
-        if ($request->has('user_role_id') && $request->user_role_id) {
-            $rules['user_role_id'] = [
                 new Numeric(),
                 new ValidUserRole($this->userRoleRepository, $request->user_role_id),
-            ];
-        }
+            ],
+        ];
 
         return $rules;
     }

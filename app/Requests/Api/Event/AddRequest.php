@@ -6,6 +6,7 @@ use App\Libs\ConfigUtil;
 use App\Repositories\EventTypeRepository;
 use App\Requests\Api\BaseApiRequest;
 use App\Rules\{
+    DateTimeComparison,
     MaxLength,
     Numeric,
     ValidEventType,
@@ -38,20 +39,18 @@ class AddRequest extends BaseApiRequest
             'event_end_time' => [
                 'required',
                 new FormatDate('Y/m/d H:i'),
-                'after:event_start_time',
+                new DateTimeComparison('event_start_time', 'event_end_time', $request->event_start_time, $request->event_end_time, 'Y/m/d H:i', '<'),
             ],
             'location' => [
                 'nullable',
                 new MaxLength(255),
             ],
-        ];
-
-        if ($request->has('event_type_id') && $request->event_type_id) {
-            $rules['event_type_id'] = [
+            'event_type_id' => [
+                'nullable',
                 new Numeric(),
                 new ValidEventType($this->eventTypeRepository, $request->event_type_id),
-            ];
-        }
+            ],
+        ];
 
         return $rules;
     }
@@ -69,18 +68,5 @@ class AddRequest extends BaseApiRequest
             'location' => 'location',
             'event_type_id' => 'event_type_id',
         ];
-    }
-
-    /**
-     * Validation error messages.
-     *
-     * @return array
-     */
-    public function messages() {
-        $parentMessage = parent::messages();
-
-        return array_merge($parentMessage, [
-            'event_end_time.after' => ConfigUtil::getMessage('ECL026', ['event_end_time', 'event_start_time']),
-        ]);
     }
 }

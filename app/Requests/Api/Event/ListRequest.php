@@ -4,6 +4,7 @@ namespace App\Requests\Api\Event;
 
 use App\Libs\ConfigUtil;
 use App\Requests\Api\BaseApiRequest;
+use App\Rules\DateTimeComparison;
 use App\Rules\FormatDate;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class ListRequest extends BaseApiRequest
             'event_start_time_to' => [
                 'nullable',
                 new FormatDate('Y/m/d'),
-                'after_or_equal:event_start_time_from',
+                new DateTimeComparison('event_start_time_from', 'event_start_time_to', $request->event_start_time_from, $request->event_start_time_to, 'Y/m/d', '<='),
             ],
             'event_end_time_from' => [
                 'nullable',
@@ -32,7 +33,7 @@ class ListRequest extends BaseApiRequest
             'event_end_time_to' => [
                 'nullable',
                 new FormatDate('Y/m/d'),
-                'after_or_equal:event_end_time_from',
+                new DateTimeComparison('event_end_time_from', 'event_end_time_to', $request->event_end_time_from, $request->event_end_time_to, 'Y/m/d', '<='),
             ],
         ];
     }

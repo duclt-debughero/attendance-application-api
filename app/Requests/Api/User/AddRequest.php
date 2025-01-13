@@ -38,6 +38,7 @@ class AddRequest extends BaseApiRequest
                 'required',
                 new MailRfc(),
                 new MaxLength(255),
+                new UniqueUser($this->mstUserRepository, $request->email_address),
             ],
             'password' => [
                 'required',
@@ -56,19 +57,10 @@ class AddRequest extends BaseApiRequest
             ],
             'user_role_id' => [
                 'required',
-            ],
-        ];
-
-        if ($request->has('email_address') && $request->email_address) {
-            $rules['email_address'][] = new UniqueUser($this->mstUserRepository, $request->email_address);
-        }
-
-        if ($request->has('user_role_id') && $request->user_role_id) {
-            $rules['user_role_id'] = [
                 new Numeric(),
                 new ValidUserRole($this->userRoleRepository, $request->user_role_id),
-            ];
-        }
+            ],
+        ];
 
         return $rules;
     }

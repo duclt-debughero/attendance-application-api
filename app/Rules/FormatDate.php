@@ -15,7 +15,6 @@ class FormatDate implements ValidationRule
      * Create a new rule instance.
      *
      * @param string $format
-     * @return void
      */
     public function __construct(
         private string $format,

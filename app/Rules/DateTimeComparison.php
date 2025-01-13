@@ -14,16 +14,16 @@ class DateTimeComparison implements ValidationRule
      *
      * @param string $startDateTimeLabel
      * @param string $endDateTimeLabel
-     * @param string $startDateTimeValue
-     * @param string $endDateTimeValue
+     * @param string|null $startDateTimeValue
+     * @param string|null $endDateTimeValue
      * @param string $format
      * @param string $operator
      */
     public function __construct(
         private string $startDateTimeLabel,
         private string $endDateTimeLabel,
-        private string $startDateTimeValue,
-        private string $endDateTimeValue,
+        private string|null $startDateTimeValue = null,
+        private string|null $endDateTimeValue = null,
         private string $format,
         private string $operator,
     ) {

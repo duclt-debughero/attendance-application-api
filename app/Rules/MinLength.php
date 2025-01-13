@@ -12,7 +12,6 @@ class MinLength implements ValidationRule
      * Create a new rule instance.
      *
      * @param int $min
-     * @return void
      */
     public function __construct(
         private int $min,

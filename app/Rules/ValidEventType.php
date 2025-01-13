@@ -9,12 +9,16 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class ValidEventType implements ValidationRule
 {
-    private EventTypeRepository $eventTypeRepository;
-    private string|int $eventTypeId;
-
-    public function __construct(EventTypeRepository $eventTypeRepository, $eventTypeId) {
-        $this->eventTypeRepository = $eventTypeRepository;
-        $this->eventTypeId = $eventTypeId;
+    /**
+     * Create a new rule instance.
+     *
+     * @param EventTypeRepository $eventTypeRepository
+     * @param string|int|null $eventTypeId
+     */
+    public function __construct(
+        private readonly EventTypeRepository $eventTypeRepository,
+        private string|int|null $eventTypeId = null,
+    ) {
     }
 
     /**
@@ -25,7 +29,7 @@ class ValidEventType implements ValidationRule
      * @param Closure $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void {
-        if (! $this->eventTypeRepository->findById($this->eventTypeId)) {
+        if (isset($this->eventTypeId) && ! $this->eventTypeRepository->findById($this->eventTypeId)) {
             $fail(ConfigUtil::getMessage('ECL050', [':attribute']));
         }
     }
