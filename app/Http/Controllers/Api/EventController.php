@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\ApiCodeNo;
+use App\Enums\{
+    ApiCodeNo,
+    ApiStatusCode,
+};
 use App\Libs\{
     ApiBusUtil,
     ConfigUtil,
@@ -11,6 +14,7 @@ use App\Repositories\EventRepository;
 use App\Requests\Api\Event\{
     AddRequest,
     EditRequest,
+    ImportCsvRequest,
     ListRequest,
 };
 use App\Services\{
@@ -208,10 +212,19 @@ class EventController extends ApiBaseController
      * Event Import CSV
      * POST /api/v1/event/import/csv
      *
-     * @param Request $request
+     * @param ImportCsvRequest $request
      */
-    public function importCsv(Request $request) {
+    public function importCsv(ImportCsvRequest $request) {
         try {
+            $importCSVFile = $request->import_csv_file;
+            $importCSVKey = 'import_csv_event';
+
+            // Import CSV
+            $importResult = $this->eventService->importCsv($importCSVKey, $importCSVFile);
+            if (! empty($importResult['errorArray'])) {
+                return ApiBusUtil::errorResponse(ApiCodeNo::VALIDATE_PARAMETER, ApiStatusCode::NG400, $importResult['errorArray']);
+            }
+
             return ApiBusUtil::successResponse();
         } catch (Exception $e) {
             Log::error($e);

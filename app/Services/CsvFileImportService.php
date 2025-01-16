@@ -192,6 +192,18 @@ class CsvFileImportService
 
                             // If parameters are not correctly set, skip this rule
                             continue 2;
+                        case 'ValidEventType':
+                            $eventRepository = "App\\Repositories\\EventTypeRepository";
+                            $eventTypeId = $dataFields[reset($params)] ?? null;
+
+                            // Check if parameters are correctly set
+                            if (class_exists($eventRepository) && isset($eventTypeId)) {
+                                $params = [new $eventRepository(), $eventTypeId];
+                                break;
+                            }
+
+                            // If parameters are not correctly set, skip this rule
+                            continue 2;
                     }
 
                     // Create rule instance
