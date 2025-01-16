@@ -1,0 +1,39 @@
+import_csv_event:
+  event_id:
+    header: Event ID
+    validate:
+      - Required
+      - Numeric
+  event_name:
+    header: Event Name
+    validate:
+      - Required
+      - MaxLength: 255
+  event_start_time:
+    header: Event Start Time
+    validate:
+      - Required
+      - FormatDate: Y/m/d H:i
+  event_end_time:
+    header: Event End Time
+    validate:
+      - Required
+      - FormatDate: Y/m/d H:i
+      - DateTimeComparison:
+        - Event Start Time
+        - Event End Time
+        - event_start_time
+        - event_end_time
+        - Y/m/d H:i
+        - lt
+  location:
+    header: Location
+    validate:
+      - MaxLength: 255
+  description:
+    header: Description
+  event_type_id:
+    header: Event Type ID
+    validate:
+      - Numeric
+      - ValidEventType: event_type_id
