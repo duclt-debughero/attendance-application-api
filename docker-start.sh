@@ -34,7 +34,7 @@ if [[ $MGS_PULL == *"fatal:"* ]]; then
 fi
 
 # Choose docker service
-LIST=("attendance-application-api exit")
+LIST=("attendance-application-api" "exit")
 echo -e "${L_GREEN}Please choose docker service: ?${NC}"
 select docker_service in $LIST
 do
