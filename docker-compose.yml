@@ -6,8 +6,8 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile
             args:
-                user: ${APP_USER}
-                uid: ${APP_UID}
+                user: ${APP_USER:-attendance-application}
+                uid: ${APP_UID:-1000}
         ports:
             - '${APP_PORT:-80}:80'
         restart: always
@@ -23,8 +23,8 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile.dev
             args:
-                user: ${APP_USER}
-                uid: ${APP_UID}
+                user: ${APP_USER:-attendance-application}
+                uid: ${APP_UID:-1000}
         ports:
             - '${APP_PORT:-80}:80'
         restart: always
@@ -33,26 +33,26 @@ services:
         networks:
             - attendance-application-network
 
-    database:
-        container_name: attendance-application-database
-        image: mysql:8.0
-        ports:
-            - '${DB_PORT:-3306}:3306'
-        restart: always
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-        volumes:
-            - database-data:/var/lib/mysql
-        networks:
-            - attendance-application-network
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+    # database:
+    #     container_name: attendance-application-database
+    #     image: mysql:8.0
+    #     ports:
+    #         - '${DB_PORT:-3306}:3306'
+    #     restart: always
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    #         MYSQL_DATABASE: ${DB_DATABASE}
+    #         MYSQL_USER: ${DB_USERNAME}
+    #         MYSQL_PASSWORD: ${DB_PASSWORD}
+    #     volumes:
+    #         - database-data:/var/lib/mysql
+    #     networks:
+    #         - attendance-application-network
+    #     healthcheck:
+    #         test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #         interval: 10s
+    #         timeout: 5s
+    #         retries: 5
 
 # Networks
 networks:
@@ -60,5 +60,5 @@ networks:
         driver: bridge
 
 # Volumes
-volumes:
-    database-data: ~
+# volumes:
+#     database-data: ~

@@ -1,33 +1,31 @@
-# FROM php:8.3-apache
-FROM ftechsolutions/php:8.3-apache
+FROM php:8.3-apache
 
 # Arguments defined in docker-compose.yml
 ARG user
 ARG uid
 
 # Install packages and enable modules
-# RUN apt-get update \
-#     && apt-get install -y git unzip zip npm exiftool \
-#     && apt-get install -y vim \
-#     && a2enmod ssl rewrite
-
-# Clear cache
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y git unzip zip git npm exiftool \
+    && apt-get install -y vim \
+    && a2enmod ssl
 
 # Get latest Composer
-# COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install PHP extensions
-# COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-# RUN install-php-extensions gd pdo_mysql bcmath zip intl opcache exif mbstring
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd pdo_mysql bcmath zip intl opcache exif mbstring
 
 # Replace default Apache config with custom configuration
 RUN rm /etc/apache2/sites-available/000-default.conf
 COPY /docker/sites-available/000-default.conf /etc/apache2/sites-available/
 
+# Enable Apache rewrite module
+RUN a2enmod rewrite
+
 # Add custom PHP configuration
 COPY /docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
-# COPY /docker/xdebug/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Create system user to run Composer and Artisan commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
@@ -35,7 +33,7 @@ RUN mkdir -p /home/$user/.composer
 RUN chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
-ENV APP_HOME /var/www/html
+ENV APP_HOME=/var/www/html
 
 # Copy source files to the application directory
 COPY . $APP_HOME
@@ -46,16 +44,9 @@ RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run 
 # Set correct permissions for storage and cache directories
 RUN chmod -R 777 $APP_HOME/storage
 RUN chmod -R 777 $APP_HOME/bootstrap/cache
-RUN chmod -R 777 $APP_HOME/vendor
 
 # Uncomment below for production use
-RUN cd $APP_HOME && \
-    php artisan view:clear && \
-    php artisan config:clear && \
-    php artisan config:cache && \
-    php artisan route:clear && \
-    php artisan clear-compiled && \
-    php artisan optimize
+RUN cd $APP_HOME && php artisan view:clear
 
 # Set the user to run the application
 USER root
