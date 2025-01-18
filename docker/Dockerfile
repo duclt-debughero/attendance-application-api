@@ -38,6 +38,9 @@ ENV APP_HOME=/var/www/html
 # Copy source files to the application directory
 COPY . $APP_HOME
 
+# Debug: Check if files are copied successfully
+RUN echo "Checking contents of $APP_HOME:" && ls -la $APP_HOME
+
 # Install Composer and Node dependencies
 RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run prod
 
