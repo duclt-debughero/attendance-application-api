@@ -19,13 +19,13 @@ RUN install-php-extensions gd pdo_mysql bcmath zip intl opcache exif mbstring
 
 # Replace default Apache config with custom configuration
 RUN rm /etc/apache2/sites-available/000-default.conf
-COPY /docker/sites-available/000-default.conf /etc/apache2/sites-available/
+COPY docker/sites-available/000-default.conf /etc/apache2/sites-available/
 
 # Enable Apache rewrite module
 RUN a2enmod rewrite
 
 # Add custom PHP configuration
-COPY /docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Create system user to run Composer and Artisan commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
@@ -33,13 +33,10 @@ RUN mkdir -p /home/$user/.composer
 RUN chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
-ENV APP_HOME=/var/www/html
+ENV APP_HOME /var/www/html
 
 # Copy source files to the application directory
 COPY . $APP_HOME
-
-# Debug: Check if files are copied successfully
-RUN echo "Checking contents of $APP_HOME:" && ls -la $APP_HOME
 
 # Install Composer and Node dependencies
 RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run prod
