@@ -26,8 +26,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware([ApiAuthToken::class]);
 
-    Route::get('/token/expiration/{accessToken}', [AuthController::class, 'getTokenExpirationByAccessToken'])->name('auth.token.expiration');
-
     Route::prefix('password')->name('password.')->group(function () {
         Route::post('/forgot', [PasswordController::class, 'forgot'])->name('forgot');
         Route::post('/reset', [PasswordController::class, 'reset'])->name('reset');

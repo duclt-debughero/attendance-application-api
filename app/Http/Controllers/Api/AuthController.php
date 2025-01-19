@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Enums\ApiCodeNo;
 use App\Libs\{
     ApiBusUtil,
-    DateUtil,
     EncryptUtil,
 };
 use App\Repositories\{
@@ -152,30 +151,6 @@ class AuthController extends ApiBaseController
             $dataRes['refresh_token'] = $device->refresh_token;
 
             return ApiBusUtil::successResponse($dataRes);
-        } catch (Exception $e) {
-            Log::error($e);
-
-            return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Get Token Expiration By Access Token
-     * GET /api/v1/token/expiration/{accessToken}
-     *
-     * @param Request $request
-     * @param string $accessToken
-     */
-    public function getTokenExpirationByAccessToken(Request $request, $accessToken) {
-        try {
-            $device = $this->deviceUserRepository->getTokenExpirationByAccessToken($accessToken);
-            if (empty($device)) {
-                return ApiBusUtil::preBuiltErrorResponse(ApiCodeNo::RECORD_NOT_EXISTS);
-            }
-
-            return ApiBusUtil::successResponse([
-                'access_token_expire' => DateUtil::formatDefaultDateTime($device->access_token_expire),
-            ]);
         } catch (Exception $e) {
             Log::error($e);
 

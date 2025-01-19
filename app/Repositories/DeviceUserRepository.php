@@ -123,32 +123,4 @@ class DeviceUserRepository extends BaseRepository
             return false;
         }
     }
-
-    /**
-     * Get token expiration by access token
-     *
-     * @param string $accessToken
-     * @return mixed
-     */
-    public function getTokenExpirationByAccessToken($accessToken) {
-        try {
-            return DeviceUser::query()
-                ->select([
-                    'device_user.access_token_expire',
-                ])
-                ->join('mst_user', function ($join) {
-                    $join
-                        ->on('mst_user.user_id', '=', 'device_user.user_id')
-                        ->whereValidDelFlg();
-                })
-                ->where('device_user.access_token', $accessToken)
-                ->whereValidDelFlg()
-                ->first();
-
-        } catch (Exception $e) {
-            Log::error($e);
-
-            return false;
-        }
-    }
 }
