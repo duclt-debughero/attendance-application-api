@@ -42,11 +42,11 @@ COPY . $APP_HOME
 RUN cd $APP_HOME && composer install --no-interaction && npm install && npm run prod
 
 # Set correct permissions for storage and cache directories
-RUN chmod -R 777 $APP_HOME/storage
-RUN chmod -R 777 $APP_HOME/bootstrap/cache
+RUN chown -R $user:www-data $APP_HOME/storage
+RUN chown -R $user:www-data $APP_HOME/bootstrap/cache
 
 # Uncomment below for production use
 RUN cd $APP_HOME && php artisan view:clear
 
 # Set the user to run the application
-USER root
+USER $user
