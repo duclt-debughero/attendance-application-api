@@ -1,7 +1,7 @@
 services:
     attendance-application-api:
         container_name: attendance-application-api
-        image: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}"
+        image: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_ECR_REPOSITORY}"
         build:
             context: .
             dockerfile: ./docker/Dockerfile
