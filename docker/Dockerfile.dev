@@ -30,8 +30,7 @@ COPY /docker/xdebug/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Create system user to run Composer and Artisan commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer
-RUN chown -R $user:$user /home/$user
+RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 
 # Set the user to run the application
 USER $user
