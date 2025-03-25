@@ -29,8 +29,7 @@ COPY /docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Create system user to run Composer and Artisan commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer
-RUN chown -R $user:$user /home/$user
+RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 
 # Set application folder as an environment variable
 ENV APP_HOME=/var/www/html
@@ -49,4 +48,4 @@ RUN chown -R $user:www-data $APP_HOME/bootstrap/cache
 RUN cd $APP_HOME && php artisan view:clear
 
 # Set the user to run the application
-USER $user
+USER root
