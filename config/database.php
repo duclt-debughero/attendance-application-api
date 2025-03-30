@@ -2,16 +2,6 @@
 
 use Illuminate\Support\Str;
 
-$dbHostRead = stringToArray(env('DB_HOST_READ'));
-if (empty($dbHostRead)) {
-    $dbHostRead = env('DB_HOST', '127.0.0.1');
-}
-
-$dbHostWrite = stringToArray(env('DB_HOST_WRITE'));
-if (empty($dbHostWrite)) {
-    $dbHostWrite = env('DB_HOST', '127.0.0.1');
-}
-
 return [
 
     /*
@@ -56,10 +46,10 @@ return [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
             'read' => [
-                'host' => $dbHostRead,
+                'host' => stringToArray(env('DB_HOST_READ')) ?: [env('DB_HOST', '127.0.0.1')],
             ],
             'write' => [
-                'host' => $dbHostWrite,
+                'host' => stringToArray(env('DB_HOST_WRITE')) ?: [env('DB_HOST', '127.0.0.1')],
             ],
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
